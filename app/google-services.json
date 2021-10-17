@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "368135152474",
+    "project_id": "myfit-653f3",
+    "storage_bucket": "myfit-653f3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:368135152474:android:19439155559d61754c4963",
+        "android_client_info": {
+          "package_name": "msa.myfit"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "368135152474-f0cuaqqaoch3qm2eac8r2r1g4rbv28lf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdB_zvcbvXC-Z1bgKdotDWy7MFiE68qWE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "368135152474-f0cuaqqaoch3qm2eac8r2r1g4rbv28lf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
