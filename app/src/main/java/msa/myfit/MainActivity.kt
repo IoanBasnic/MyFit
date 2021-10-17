@@ -10,15 +10,13 @@ import com.google.firebase.auth.FirebaseAuth
 import msa.myfit.authentication.LoginActivity
 
 class MainActivity : AppCompatActivity() {
-
-    private val textViewUserId: TextView = findViewById(R.id.tv_user_id)
-    private val textViewEmailId: TextView = findViewById(R.id.tv_email_id)
-    private val btnLogout: TextView = findViewById(R.id.btn_logout)
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+         val textViewUserId: TextView = findViewById(R.id.tv_user_id)
+         val textViewEmailId: TextView = findViewById(R.id.tv_email_id)
+         val btnLogout: TextView = findViewById(R.id.btn_logout)
 
         val userId = intent.getStringExtra("user_id")
         val emailId = intent.getStringExtra("email_id")

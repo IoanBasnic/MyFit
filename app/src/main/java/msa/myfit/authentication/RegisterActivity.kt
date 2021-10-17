@@ -1,5 +1,6 @@
 package msa.myfit.authentication
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -8,6 +9,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -15,14 +17,17 @@ import msa.myfit.MainActivity
 import msa.myfit.R
 
 class RegisterActivity : AppCompatActivity() {
-    private val btnRegister: Button = findViewById(R.id.btn_register)
-    private val textEmail: EditText = findViewById(R.id.editTextTextEmailAddress)
-    private val textPassword: EditText = findViewById(R.id.editTextTextPassword)
-    private val textConfirmPassword: EditText = findViewById(R.id.editTextTextConfirmPassword)
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
+
+        val context: Context = this
+        FirebaseApp.initializeApp(context)
+
+        val btnRegister: Button = findViewById(R.id.btn_register)
+        val textEmail: EditText = findViewById(R.id.editTextTextEmailAddress)
+        val textPassword: EditText = findViewById(R.id.editTextTextPassword)
+        val textConfirmPassword: EditText = findViewById(R.id.editTextTextConfirmPassword)
 
         btnRegister.setOnClickListener {
             val email: String = textEmail.text.toString().trim { it <= ' '}
