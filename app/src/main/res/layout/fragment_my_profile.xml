@@ -9,7 +9,7 @@
     <RelativeLayout
         android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="150dp"
         android:background="@color/themeColor"
         android:padding="20dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -31,7 +31,8 @@
             android:layout_marginLeft="10dp"
             android:layout_toRightOf="@+id/profile_image"
             android:background="@color/primaryTextColor"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:hint="first name"/>
 
         <EditText
             android:id="@+id/edit_last_name"
@@ -41,101 +42,166 @@
             android:layout_marginLeft="10dp"
             android:layout_toRightOf="@+id/edit_first_name"
             android:background="@color/primaryTextColor"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:hint="last name"/>
 
     </RelativeLayout>
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="20dp"
-        app:layout_constraintTop_toBottomOf="@+id/relativeLayout">
+        app:layout_constraintTop_toBottomOf="@+id/relativeLayout"
+        android:orientation="vertical">
+
+<!--        <LinearLayout-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_margin="10dp"-->
+<!--            android:orientation="horizontal">-->
+
+<!--            <RelativeLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent">-->
+
+<!--                <ImageView-->
+<!--                    android:layout_width="30dp"-->
+<!--                    android:layout_height="30dp"-->
+<!--                    android:layout_centerHorizontal="true"-->
+<!--                    android:src="@drawable/settings" />-->
+
+<!--                <EditText-->
+<!--                    android:id="@+id/edit_height"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_centerInParent="true"-->
+<!--                    android:textSize="20sp"-->
+<!--                    android:hint="height"/>-->
+
+<!--            </RelativeLayout>-->
+
+<!--            <RelativeLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent">-->
+
+<!--                <ImageView-->
+<!--                    android:layout_width="30dp"-->
+<!--                    android:layout_height="30dp"-->
+<!--                    android:layout_centerHorizontal="true"-->
+<!--                    android:src="@drawable/home" />-->
+
+<!--                <EditText-->
+<!--                    android:id="@+id/edit_age"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_centerInParent="true"-->
+<!--                    android:textSize="20sp"-->
+<!--                    android:hint="age"/>-->
+
+<!--            </RelativeLayout>-->
+
+<!--            <RelativeLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent">-->
+
+<!--                <ImageView-->
+<!--                    android:layout_width="30dp"-->
+<!--                    android:layout_height="30dp"-->
+<!--                    android:layout_centerHorizontal="true"-->
+<!--                    android:src="@drawable/profile" />-->
+
+<!--                <Spinner-->
+<!--                    android:id="@+id/spinner_gender"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_centerInParent="true"-->
+<!--                    android:textSize="20sp"-->
+<!--                    android:hint="gender"/>-->
+
+<!--            </RelativeLayout>-->
+
+
+<!--            <RelativeLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent">-->
+
+<!--                <ImageView-->
+<!--                    android:layout_width="30dp"-->
+<!--                    android:layout_height="30dp"-->
+<!--                    android:layout_centerHorizontal="true"-->
+<!--                    android:src="@drawable/profile" />-->
+
+<!--                <Button-->
+<!--                    android:id="@+id/btn_update_profile"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_centerInParent="true"-->
+<!--                    android:textSize="20sp" />-->
+
+<!--            </RelativeLayout>-->
+
+
+<!--        </LinearLayout>-->
+
+
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:orientation="horizontal">
-
-            <RelativeLayout
+            android:padding="20dp"
+            android:orientation="vertical">
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_centerHorizontal="true"
-                    android:src="@drawable/settings" />
-
-                <EditText
+                android:layout_height="wrap_content"
+                android:hint="Height">
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/edit_height"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:textSize="20sp" />
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="175"/>
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
 
-            </RelativeLayout>
-
-            <RelativeLayout
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="20dp"
+            android:orientation="horizontal">
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_centerHorizontal="true"
-                    android:src="@drawable/home" />
-
-                <EditText
+                android:layout_height="wrap_content"
+                android:hint="Age">
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/edit_age"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:textSize="20sp" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_centerHorizontal="true"
-                    android:src="@drawable/profile" />
-
-                <Spinner
-                    android:id="@+id/spinner_gender"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:textSize="20sp" />
-
-            </RelativeLayout>
-
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_centerHorizontal="true"
-                    android:src="@drawable/profile" />
-
-                <Button
-                    android:id="@+id/btn_update_profile"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:textSize="20sp" />
-
-            </RelativeLayout>
-
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="20"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
 
-    </RelativeLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="20dp"
+            android:orientation="horizontal">
+            <Spinner
+                android:id="@+id/spinner_gender"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="gender">
+            </Spinner>
+        </LinearLayout>
+
+        <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
+            android:id="@+id/btn_update_profile"
+            style="@style/loginButton"
+            android:layout_gravity="center_horizontal"
+            android:text="Edit profile"
+            app:initialCornerAngle="27dp"
+            app:spinning_bar_color="#FFF"
+            app:spinning_bar_padding="6dp"
+            app:spinning_bar_width="4dp"
+            />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

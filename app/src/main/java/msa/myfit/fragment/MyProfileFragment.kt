@@ -1,17 +1,21 @@
 package msa.myfit.fragment
 
-import android.content.Intent
+import android.app.Activity
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.EditText
+import android.widget.Spinner
+import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseAuth
 import msa.myfit.R
 import msa.myfit.databinding.ActivityMainBinding
 import msa.myfit.firebase.FirebaseUtils
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -71,6 +75,8 @@ class MyProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val fragmentActivity: Activity? = activity
+
         val btnUpdateProfile: Button = view.findViewById(R.id.btn_update_profile)
         val firstName: EditText = view.findViewById(R.id.edit_first_name)
         val lastName: EditText = view.findViewById(R.id.edit_last_name)
@@ -78,15 +84,17 @@ class MyProfileFragment : Fragment() {
         val height: EditText = view.findViewById(R.id.edit_height)
 
         val gender: Spinner = view.findViewById(R.id.spinner_gender)
-        ArrayAdapter.createFromResource(
-            this,
-            R.array.gender_options_array,
-            android.R.layout.simple_spinner_item
-        ).also { adapter ->
-            // Specify the layout to use when the list of choices appears
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            // Apply the adapter to the spinner
-            gender.adapter = adapter
+        if (fragmentActivity != null) {
+            ArrayAdapter.createFromResource(
+                fragmentActivity,
+                R.array.gender_options_array,
+                android.R.layout.simple_spinner_item
+            ).also { adapter ->
+                // Specify the layout to use when the list of choices appears
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                // Apply the adapter to the spinner
+                gender.adapter = adapter
+            }
         }
         val correlationId = FirebaseAuth.getInstance().currentUser!!.tenantId
 
