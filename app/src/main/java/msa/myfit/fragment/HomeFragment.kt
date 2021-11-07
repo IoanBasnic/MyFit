@@ -64,16 +64,16 @@ class HomeFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        val intent = Intent(activity, HomeFragment::class.java)
-        val textViewUserId: TextView = view.findViewById(R.id.tv_user_id)
-        val textViewEmailId: TextView = view.findViewById(R.id.tv_email_id)
-
-        val userId = intent.getStringExtra("user_id")
-        val emailId = intent.getStringExtra("email_id")
-
-        textViewUserId.text = "User id : $userId"
-        textViewEmailId.text = "Email id : $emailId"
+//        super.onViewCreated(view, savedInstanceState)
+//
+//        val intent = Intent(activity, HomeFragment::class.java)
+//        val textViewUserId: TextView = view.findViewById(R.id.tv_user_id)
+//        val textViewEmailId: TextView = view.findViewById(R.id.tv_email_id)
+//
+//        val userId = intent.getStringExtra("user_id")
+//        val emailId = intent.getStringExtra("email_id")
+//
+//        textViewUserId.text = "User id : $userId"
+//        textViewEmailId.text = "Email id : $emailId"
     }
 }
