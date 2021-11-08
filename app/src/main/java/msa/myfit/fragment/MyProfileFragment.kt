@@ -7,13 +7,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.EditText
 import android.widget.Spinner
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.SetOptions
+import kotlinx.coroutines.*
+import kotlinx.coroutines.tasks.await
 import msa.myfit.R
 import msa.myfit.databinding.ActivityMainBinding
+import msa.myfit.domain.UserProfileFragmentData
 import msa.myfit.firebase.FirebaseUtils
 
 
@@ -30,11 +34,14 @@ private const val ARG_PARAM2 = "param2"
 
 const val TAG = "FIRESTORE"
 
-class MyProfileFragment : Fragment() {
+class MyProfileFragment(mainActivity: AppCompatActivity) : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
     private var binding: ActivityMainBinding? = null
+
+    private val mainActivity = mainActivity
+    private var retrievedDocuments: MutableList<DocumentSnapshot>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,8 +70,8 @@ class MyProfileFragment : Fragment() {
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            MyProfileFragment().apply {
+        fun newInstance(param1: String, param2: String, mainActivity: AppCompatActivity) =
+            MyProfileFragment(mainActivity).apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)
