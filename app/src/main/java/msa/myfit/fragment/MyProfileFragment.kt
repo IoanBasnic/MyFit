@@ -104,6 +104,7 @@ class MyProfileFragment(mainActivity: AppCompatActivity) : Fragment() {
         var existingDocument: DocumentSnapshot? = null
         GlobalScope.launch {
             existingDocument = getUserProfilesFromDbAndUpdateView(correlationId, userProfileFragment)
+            Log.i("tag","Retrieved existing document $existingDocument with correlation id $correlationId")
         }
 
         if (fragmentActivity != null) {
@@ -230,7 +231,7 @@ class MyProfileFragment(mainActivity: AppCompatActivity) : Fragment() {
             userProfileFragment.age.setText(a.toString())
         }
 
-        val h = userProfile.data!![age]
+        val h = userProfile.data!![height]
         if (h != null) {
             userProfileFragment.height.setText(h.toString())
         }
@@ -259,7 +260,7 @@ class MyProfileFragment(mainActivity: AppCompatActivity) : Fragment() {
             userProfileFragment.age.setText(a.toString())
         }
 
-        val h = userProfileToAdd[age]
+        val h = userProfileToAdd[height]
         if (h != null) {
             userProfileFragment.height.setText(h.toString())
         }
@@ -285,7 +286,7 @@ class MyProfileFragment(mainActivity: AppCompatActivity) : Fragment() {
 
     private suspend fun getUserProfilesFromDb(correlationId: String): MutableList<DocumentSnapshot>{
         return FirebaseUtils().firestoreDatabase.collection(userProfileDatabase)
-            .whereEqualTo(correlationId, correlationId)
+            .whereEqualTo(DatabaseVariables.correlationId, correlationId)
             .get()
             .await()
             .documents
