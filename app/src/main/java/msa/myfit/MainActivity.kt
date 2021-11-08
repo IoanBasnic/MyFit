@@ -17,7 +17,7 @@ import msa.myfit.fragment.SettingsFragment
 class MainActivity : AppCompatActivity() {
 
     private val homeFragment = HomeFragment();
-    private val myProfileFragment = MyProfileFragment();
+    private val myProfileFragment = MyProfileFragment(this);
     private val settingsFragment = SettingsFragment();
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -7,13 +7,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.EditText
 import android.widget.Spinner
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.SetOptions
+import kotlinx.coroutines.*
+import kotlinx.coroutines.tasks.await
 import msa.myfit.R
 import msa.myfit.databinding.ActivityMainBinding
+import msa.myfit.domain.DatabaseVariables
+import msa.myfit.domain.DatabaseVariables.age
+import msa.myfit.domain.DatabaseVariables.firstName
+import msa.myfit.domain.DatabaseVariables.gender
+import msa.myfit.domain.DatabaseVariables.height
+import msa.myfit.domain.DatabaseVariables.lastName
+import msa.myfit.domain.DatabaseVariables.userProfileDatabase
+import msa.myfit.domain.UserProfileFragmentData
 import msa.myfit.firebase.FirebaseUtils
 
 
@@ -30,11 +41,14 @@ private const val ARG_PARAM2 = "param2"
 
 const val TAG = "FIRESTORE"
 
-class MyProfileFragment : Fragment() {
+class MyProfileFragment(mainActivity: AppCompatActivity) : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
     private var binding: ActivityMainBinding? = null
+
+    private val mainActivity = mainActivity
+    private var retrievedDocuments: MutableList<DocumentSnapshot>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,8 +77,8 @@ class MyProfileFragment : Fragment() {
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            MyProfileFragment().apply {
+        fun newInstance(param1: String, param2: String, mainActivity: AppCompatActivity) =
+            MyProfileFragment(mainActivity).apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)
@@ -74,16 +88,24 @@ class MyProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         val fragmentActivity: Activity? = activity
 
-        val btnUpdateProfile: Button = view.findViewById(R.id.btn_update_profile)
-        val firstName: EditText = view.findViewById(R.id.edit_first_name)
-        val lastName: EditText = view.findViewById(R.id.edit_last_name)
-        val age: EditText = view.findViewById(R.id.edit_age)
-        val height: EditText = view.findViewById(R.id.edit_height)
+        val correlationId = FirebaseAuth.getInstance().currentUser!!.uid
 
-        val gender: Spinner = view.findViewById(R.id.spinner_gender)
+        val userProfileFragment = UserProfileFragmentData(
+            btnUpdateProfile = view.findViewById(R.id.btn_update_profile),
+            firstName = view.findViewById(R.id.edit_first_name),
+            lastName = view.findViewById(R.id.edit_last_name),
+            gender = view.findViewById(R.id.spinner_gender),
+            age = view.findViewById(R.id.edit_age),
+            height = view.findViewById(R.id.edit_height)
+        )
+
+        var existingDocument: DocumentSnapshot? = null
+        GlobalScope.launch {
+            existingDocument = getUserProfilesFromDbAndUpdateView(correlationId, userProfileFragment)
+        }
+
         if (fragmentActivity != null) {
             ArrayAdapter.createFromResource(
                 fragmentActivity,
@@ -93,30 +115,179 @@ class MyProfileFragment : Fragment() {
                 // Specify the layout to use when the list of choices appears
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 // Apply the adapter to the spinner
-                gender.adapter = adapter
+                userProfileFragment.gender.adapter = adapter
             }
         }
-        val correlationId = FirebaseAuth.getInstance().currentUser!!.tenantId
 
 
-        btnUpdateProfile.setOnClickListener {
-            val hashMap = hashMapOf<String, Any?>(
-                "correlationId" to correlationId,
-                "firstName" to firstName.text.toString(),
-                "lastName" to lastName.text.toString(),
-                "gender" to gender.toString(),
-                "age" to age.toString(),
-                "height" to height.toString()
+        userProfileFragment.btnUpdateProfile.setOnClickListener {
+
+            if(!retrievedDocuments.isNullOrEmpty())
+                existingDocument = retrievedDocuments!![0]
+
+            val userProfileToAdd = hashMapOf<String, Any?>(
+                DatabaseVariables.correlationId to correlationId,
+                firstName to userProfileFragment.firstName.text.toString(),
+                lastName to userProfileFragment.lastName.text.toString(),
+                gender to userProfileFragment.gender.selectedItem.toString(),
+                age to userProfileFragment.age.text.toString(),
+                height to userProfileFragment.height.text.toString()
             )
 
-            FirebaseUtils().firestoreDatabase.collection("user_profiles")
-                .add(hashMap)
-                .addOnSuccessListener {
-                    Log.d(TAG, "Added user profile with ID ${it.id}")
-                }
-                .addOnFailureListener { exception ->
-                    Log.w(TAG, "Error adding user profile $exception")
-                }
+            if(existingDocument != null){
+                FirebaseUtils().firestoreDatabase.collection(userProfileDatabase)
+                    .document(existingDocument!!.id)
+                    .set(userProfileToAdd, SetOptions.merge())
+                    .addOnSuccessListener {
+                        Log.d(TAG, "Updated user profile with correlation id $correlationId")
+
+                        mainActivity.runOnUiThread {
+                            updateUserProfileData(
+                                userProfileToAdd,
+                                userProfileFragment
+                            )
+                        }
+                    }
+                    .addOnFailureListener { exception ->
+                        Log.w(TAG, "Error adding user profile $exception")
+                    }
+            }
+            else{
+                FirebaseUtils().firestoreDatabase.collection(userProfileDatabase)
+                    .add(userProfileToAdd)
+                    .addOnSuccessListener {
+                        Log.d(TAG, "Added user profile with ID ${it.id}")
+
+                        mainActivity.runOnUiThread {
+                            updateUserProfileData(
+                                userProfileToAdd,
+                                userProfileFragment
+                            )
+                        }
+                    }
+                    .addOnFailureListener { exception ->
+                        Log.w(TAG, "Error adding user profile $exception")
+                    }
+            }
+
+            existingDocument = null
+            retrievedDocuments = null
+            GlobalScope.launch {
+                retrievedDocuments = getUserProfilesFromDb(correlationId)
+            }
         }
+    }
+
+    private suspend fun getUserProfilesFromDbAndUpdateView(correlationId: String, userProfileFragment: UserProfileFragmentData): DocumentSnapshot? {
+        mainActivity.runOnUiThread{enableUserProfileFragment(userProfileFragment, false)}
+
+        val userProfiles = getUserProfilesFromDb(correlationId)
+
+        if(userProfiles.size > 1){
+            Log.w(TAG, "Error user has more than one user profiles")
+        }
+
+        if(userProfiles.isNotEmpty()) {
+            val existingUserProfile = userProfiles[0]
+
+            mainActivity.runOnUiThread {
+                setExistingUserProfileDataToFragment(
+                    existingUserProfile,
+                    userProfileFragment
+                )
+            }
+        }
+
+        mainActivity.runOnUiThread{enableUserProfileFragment(userProfileFragment, true)}
+
+        if(userProfiles.isEmpty())
+            return null
+        return userProfiles[0]
+    }
+
+    private fun setExistingUserProfileDataToFragment(
+        userProfile: DocumentSnapshot,
+        userProfileFragment: UserProfileFragmentData
+    ){
+        val fn = userProfile.data!![firstName]
+        if (fn != null) {
+            userProfileFragment.firstName.setText(fn.toString())
+        }
+
+        val ln = userProfile.data!![lastName]
+        if (ln != null) {
+            userProfileFragment.lastName.setText(ln.toString())
+        }
+
+        val g = userProfile.data!![gender]
+        if (g != null) {
+            val spinnerPosition: Int = getIndex(userProfileFragment.gender, g.toString())
+            userProfileFragment.gender.setSelection(spinnerPosition)
+        }
+
+        val a = userProfile.data!![age]
+        if (a != null) {
+            userProfileFragment.age.setText(a.toString())
+        }
+
+        val h = userProfile.data!![age]
+        if (h != null) {
+            userProfileFragment.height.setText(h.toString())
+        }
+    }
+
+    private fun updateUserProfileData(userProfileToAdd: HashMap<String, Any?>, userProfileFragment: UserProfileFragmentData){
+        val fn = userProfileToAdd[firstName]
+        if (fn != null) {
+            userProfileFragment.firstName.setText(fn.toString())
+        }
+
+        val ln = userProfileToAdd[lastName]
+        if (ln != null) {
+            userProfileFragment.lastName.setText(ln.toString())
+        }
+
+        val g = userProfileToAdd[gender]
+        if (g != null) {
+            val spinnerPosition: Int = getIndex(userProfileFragment.gender, g.toString())
+
+            userProfileFragment.gender.setSelection(spinnerPosition)
+        }
+
+        val a = userProfileToAdd[age]
+        if (a != null) {
+            userProfileFragment.age.setText(a.toString())
+        }
+
+        val h = userProfileToAdd[age]
+        if (h != null) {
+            userProfileFragment.height.setText(h.toString())
+        }
+    }
+
+
+    private fun getIndex(spinner: Spinner, myString: String): Int {
+        for (i in 0 until spinner.count) {
+            if (spinner.getItemAtPosition(i).toString().equals(myString, ignoreCase = true)) {
+                return i
+            }
+        }
+        return 0
+    }
+
+    private fun enableUserProfileFragment(userProfileFragment: UserProfileFragmentData, shouldBe: Boolean){
+        userProfileFragment.firstName.isEnabled = shouldBe;
+        userProfileFragment.lastName.isEnabled = shouldBe;
+        userProfileFragment.gender.isEnabled = shouldBe;
+        userProfileFragment.age.isEnabled = shouldBe;
+        userProfileFragment.height.isEnabled = shouldBe;
+    }
+
+    private suspend fun getUserProfilesFromDb(correlationId: String): MutableList<DocumentSnapshot>{
+        return FirebaseUtils().firestoreDatabase.collection(userProfileDatabase)
+            .whereEqualTo(correlationId, correlationId)
+            .get()
+            .await()
+            .documents
     }
 }
