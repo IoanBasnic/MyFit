@@ -17,6 +17,14 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
+        val intent = Intent(this@LoginActivity, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+
+        if(FirebaseAuth.getInstance().currentUser != null){
+            startActivity(intent)
+            finish()
+        }
+
         val textRegister: TextView = findViewById(R.id.tv_register)
         val btnLogin: Button = findViewById(R.id.btn_login)
         val textEmail: EditText = findViewById(R.id.editTextTextEmailAddress)
@@ -57,8 +65,6 @@ class LoginActivity : AppCompatActivity() {
                                         Toast.LENGTH_SHORT
                                     ).show()
 
-                                    val intent = Intent(this@LoginActivity, MainActivity::class.java)
-                                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                                     intent.putExtra("user_id", FirebaseAuth.getInstance().currentUser!!.uid)
                                     intent.putExtra("email_id", email)
                                     startActivity(intent)
