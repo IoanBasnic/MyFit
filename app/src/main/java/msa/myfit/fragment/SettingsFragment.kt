@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseAuth
 import msa.myfit.R
@@ -67,7 +68,7 @@ class SettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val btnLogout: TextView = view.findViewById(R.id.btn_logout)
+        val btnLogout: CardView = view.findViewById(R.id.btn_logout)
         btnLogout.setOnClickListener {
             FirebaseAuth.getInstance().signOut()
 
