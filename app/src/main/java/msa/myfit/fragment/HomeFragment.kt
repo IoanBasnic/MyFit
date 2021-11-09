@@ -1,12 +1,13 @@
 package msa.myfit.fragment
 
-import android.content.Intent
+import android.R.attr.button
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import msa.myfit.R
 
 
@@ -40,9 +41,18 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
+    fun replaceFragment(someFragment: Fragment?) {
+        val transaction: FragmentTransaction = requireFragmentManager().beginTransaction()
+        if (someFragment != null) {
+            transaction.replace(R.id.HomeFragmentId, someFragment)
+        }
+        transaction.addToBackStack(null)
+        transaction.commit()
+    }
     companion object {
         /**
          * Use this factory method to create a new instance of
@@ -64,16 +74,39 @@ class HomeFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-//        super.onViewCreated(view, savedInstanceState)
-//
-//        val intent = Intent(activity, HomeFragment::class.java)
-//        val textViewUserId: TextView = view.findViewById(R.id.tv_user_id)
-//        val textViewEmailId: TextView = view.findViewById(R.id.tv_email_id)
-//
-//        val userId = intent.getStringExtra("user_id")
-//        val emailId = intent.getStringExtra("email_id")
-//
-//        textViewUserId.text = "User id : $userId"
-//        textViewEmailId.text = "Email id : $emailId"
+        val caloriesEatenBtn: CardView = view.findViewById(R.id.calories_eaten)
+        val routeBtn: CardView = view.findViewById(R.id.routes)
+        val overviewBtn: CardView = view.findViewById(R.id.overview)
+
+        caloriesEatenBtn.setOnClickListener { view ->
+            var fragment: Fragment? = null
+            when (view.id) {
+                R.id.calories_eaten  -> {
+                    fragment = CaloriesEatenFragment()
+                    replaceFragment(fragment)
+                }
+            }
+        }
+
+        routeBtn.setOnClickListener { view ->
+            var fragment: Fragment? = null
+            when (view.id) {
+                R.id.routes  -> {
+                    fragment = RouteFragment()
+                    replaceFragment(fragment)
+                }
+            }
+        }
+
+        overviewBtn.setOnClickListener { view ->
+            var fragment: Fragment? = null
+            when (view.id) {
+                R.id.overview  -> {
+                    fragment = OverviewFragment()
+                    replaceFragment(fragment)
+                }
+            }
+        }
     }
+
 }
