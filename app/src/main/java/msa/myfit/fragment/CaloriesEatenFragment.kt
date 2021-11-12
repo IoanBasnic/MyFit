@@ -1,10 +1,15 @@
 package msa.myfit.fragment
 
+import android.graphics.Color
 import android.os.Bundle
+import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TableLayout
+import android.widget.TableRow
+import android.widget.TextView
 import msa.myfit.R
 
 // TODO: Rename parameter arguments, choose names that match
@@ -59,4 +64,48 @@ class CaloriesEatenFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val stk: TableLayout = view.findViewById(R.id.table_main);
+        val tbrow0: TableRow = TableRow(activity);
+        val tv0 : TextView = TextView(activity);
+        tv0.setText(" Sl.No ");
+        tv0.setTextColor(Color.WHITE);
+        tbrow0.addView(tv0);
+        val tv1 : TextView = TextView(activity);
+        tv1.setText(" Product ");
+        tv1.setTextColor(Color.WHITE);
+        tbrow0.addView(tv1);
+        val tv2 : TextView= TextView(activity);
+        tv2.setText(" Unit Price ");
+        tv2.setTextColor(Color.WHITE);
+        tbrow0.addView(tv2);
+        val tv3 : TextView= TextView(activity);
+        tv3.setText(" Stock Remaining ");
+        tv3.setTextColor(Color.WHITE);
+        tbrow0.addView(tv3);
+        stk.addView(tbrow0);
+        for (i in 0 ..25) {
+            val tbrow : TableRow = TableRow(activity);
+            val t1v : TextView = TextView(activity);
+            t1v.setText("" + i);
+            t1v.setTextColor(Color.WHITE);
+            t1v.setGravity(Gravity.CENTER);
+            tbrow.addView(t1v);
+            val t2v : TextView = TextView(activity);
+            t2v.setText("Product " + i);
+            t2v.setTextColor(Color.WHITE);
+            t2v.setGravity(Gravity.CENTER);
+            tbrow.addView(t2v);
+            val t3v : TextView = TextView(activity);
+            t3v.setText("Rs." + i);
+            t3v.setTextColor(Color.WHITE);
+            t3v.setGravity(Gravity.CENTER);
+            tbrow.addView(t3v);
+            val t4v : TextView = TextView(activity);
+            t4v.setText("" + i * 15 / 32 * 10);
+            t4v.setTextColor(Color.WHITE);
+            t4v.setGravity(Gravity.CENTER);
+            tbrow.addView(t4v);
+            stk.addView(tbrow);
+        }
+    }
 }
