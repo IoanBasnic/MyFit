@@ -57,4 +57,6 @@ class CaloriesEatenFragment : Fragment() {
                 }
             }
     }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 }
