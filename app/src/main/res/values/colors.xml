@@ -11,5 +11,5 @@
     <color name="login_bk_color">#fff</color>
     <color name="whiteTextColor">#fff</color>
     <color name="primaryTextColor">#2E78FE</color>
-
+    <color name="transparentBackground">#4D808080</color>
 </resources>
