@@ -2,12 +2,10 @@ package msa.myfit.authentication
 
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Toast
+import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.AuthResult
@@ -24,10 +22,15 @@ class RegisterActivity : AppCompatActivity() {
         val context: Context = this
         FirebaseApp.initializeApp(context)
 
+        val textLogin: TextView = findViewById(R.id.tv_login)
         val btnRegister: Button = findViewById(R.id.btn_register)
         val textEmail: EditText = findViewById(R.id.editTextTextEmailAddress)
         val textPassword: EditText = findViewById(R.id.editTextTextPassword)
         val textConfirmPassword: EditText = findViewById(R.id.editTextTextConfirmPassword)
+
+        textLogin.setOnClickListener{
+            startActivity(Intent(this@RegisterActivity, LoginActivity::class.java))
+        }
 
         btnRegister.setOnClickListener {
             val email: String = textEmail.text.toString().trim { it <= ' '}
@@ -79,14 +82,17 @@ class RegisterActivity : AppCompatActivity() {
                                         Toast.LENGTH_SHORT
                                     ).show()
 
-                                    val intent = Intent(this@RegisterActivity, MainActivity::class.java)
-                                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                    val intent = Intent(
+                                        this@RegisterActivity,
+                                        MainActivity::class.java
+                                    )
+                                    intent.flags =
+                                        Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                                     intent.putExtra("user_id", firebaseUser.uid)
                                     intent.putExtra("email_id", email)
                                     startActivity(intent)
                                     finish()
-                                }
-                                else{
+                                } else {
                                     Toast.makeText(
                                         this@RegisterActivity,
                                         task.exception!!.message.toString(),
@@ -100,6 +106,4 @@ class RegisterActivity : AppCompatActivity() {
             }
         }
     }
-
-
 }
