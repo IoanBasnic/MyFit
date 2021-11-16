@@ -101,7 +101,7 @@
             <TextView
                 style="@style/parent"
                 android:layout_marginTop="@dimen/loginViewsMargin"
-                android:id="@+id/tv_register"
+                android:id="@+id/tv_login"
                 android:text="Already have an account?\nPress here"
                 android:textAlignment="center"
                 android:textColor="@color/themeColor"
