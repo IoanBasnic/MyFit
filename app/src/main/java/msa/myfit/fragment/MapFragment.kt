@@ -5,8 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
-import androidx.fragment.app.replace
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import msa.myfit.R
 
 
@@ -17,10 +21,10 @@ private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
- * Use the [RouteFragment.newInstance] factory method to
+ * Use the [MapFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class RouteFragment : Fragment() {
+class MapFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -38,14 +42,21 @@ class RouteFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_route, container, false)
-    }
+        val rootView: View = inflater.inflate(R.layout.fragment_map, container, false)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val childFragment: MapFragment = MapFragment()
-        val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
-        transaction.replace(R.id.GoogleMapsFragment, childFragment).commit()
+        val mapFragment =
+            childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
 
+        mapFragment?.getMapAsync(OnMapReadyCallback {
+            fun onMapReady(googleMap: GoogleMap) {
+                // Add a marker in Sydney and move the camera
+                val sydney = LatLng(-34.0, 151.0)
+                googleMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
+                googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+            }
+        }
+        )
+        return rootView
     }
 
     companion object {
@@ -55,12 +66,12 @@ class RouteFragment : Fragment() {
          *
          * @param param1 Parameter 1.
          * @param param2 Parameter 2.
-         * @return A new instance of fragment RouteFragment.
+         * @return A new instance of fragment MapFragment.
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            RouteFragment().apply {
+            MapFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)

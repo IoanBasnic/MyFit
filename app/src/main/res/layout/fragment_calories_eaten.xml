@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:id="@+id/calories_fragment"
     android:background="@drawable/trasnparent_background"
-    tools:context=".fragment.HomeFragment">
+    tools:context=".fragment.CaloriesEatenFragment">
 
     <GridLayout
         android:id="@+id/gridLayout"
