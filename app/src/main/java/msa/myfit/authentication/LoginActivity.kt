@@ -160,7 +160,7 @@ class LoginActivity : AppCompatActivity() {
                         }
                     }
                     val googleCredential = GoogleAuthProvider.getCredential(idToken, null)
-                    auth!!.signInWithCredential(googleCredential)
+                    auth.signInWithCredential(googleCredential)
                         .addOnCompleteListener(this) { task ->
                             if (task.isSuccessful) {
                                 Log.d(TAG, "signInWithCredential:success")

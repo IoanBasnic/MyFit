@@ -16,7 +16,7 @@ import msa.myfit.fragment.SettingsFragment
 
 class MainActivity : AppCompatActivity() {
 
-    private val homeFragment = HomeFragment();
+    private val homeFragment = HomeFragment(this);
     private val myProfileFragment = MyProfileFragment(this);
     private val settingsFragment = SettingsFragment();
 

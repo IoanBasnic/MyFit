@@ -15,6 +15,17 @@ import msa.myfit.MainActivity
 import msa.myfit.R
 
 class RegisterActivity : AppCompatActivity() {
+
+    override fun onStart() {
+        super.onStart()
+        val intentMain = Intent(this@RegisterActivity, MainActivity::class.java)
+
+        if(FirebaseAuth.getInstance().currentUser != null){
+            startActivity(intentMain)
+            finish()
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
