@@ -12,4 +12,12 @@ object DatabaseVariables {
     val age = "age"
     val height = "height"
 
+    //calories eaten
+    //database name
+    val foodDatabase = "calories_intake"
+    val userId = "user_id"
+    val calories = "calories"
+    val name = "name"
+    val inputDate = "input_date"
+
 }

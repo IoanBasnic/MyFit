@@ -1,16 +1,36 @@
 package msa.myfit.fragment
 
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TableLayout
 import android.widget.TableRow
 import android.widget.TextView
+import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentSnapshot
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import msa.myfit.R
+import msa.myfit.domain.AddFoodFragmentData
+import msa.myfit.domain.DatabaseVariables
+import msa.myfit.domain.DatabaseVariables.calories
+import msa.myfit.domain.DatabaseVariables.foodDatabase
+import msa.myfit.domain.DatabaseVariables.inputDate
+import msa.myfit.domain.DatabaseVariables.name
+import msa.myfit.domain.DatabaseVariables.userId
+import msa.myfit.firebase.FirebaseUtils
+import java.time.LocalDate
+import java.time.OffsetDateTime
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -22,10 +42,13 @@ private const val ARG_PARAM2 = "param2"
  * Use the [CaloriesEatenFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class CaloriesEatenFragment : Fragment() {
+class CaloriesEatenFragment(mainActivity: AppCompatActivity) : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+
+    private val mainActivity = mainActivity
+    private var retrievedFoods: MutableList<DocumentSnapshot>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +58,7 @@ class CaloriesEatenFragment : Fragment() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -54,8 +78,8 @@ class CaloriesEatenFragment : Fragment() {
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            CaloriesEatenFragment().apply {
+        fun newInstance(param1: String, param2: String, mainActivity: AppCompatActivity) =
+            CaloriesEatenFragment(mainActivity).apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)
@@ -63,49 +87,132 @@ class CaloriesEatenFragment : Fragment() {
             }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val stk: TableLayout = view.findViewById(R.id.table_main);
-        val tbrow0: TableRow = TableRow(activity);
-        val tv0 : TextView = TextView(activity);
-        tv0.setText(" No. ");
-        tv0.setTextColor(Color.DKGRAY);
-        tbrow0.addView(tv0);
-        val tv1 : TextView = TextView(activity);
-        tv1.setText(" Food ");
-        tv1.setTextColor(Color.DKGRAY);
-        tbrow0.addView(tv1);
-        val tv2 : TextView= TextView(activity);
-        tv2.setText(" Type ");
-        tv2.setTextColor(Color.DKGRAY);
-        tbrow0.addView(tv2);
-        val tv3 : TextView= TextView(activity);
-        tv3.setText("Kcal ");
-        tv3.setTextColor(Color.DKGRAY);
-        tbrow0.addView(tv3);
-        stk.addView(tbrow0);
-        for (i in 0 ..25) {
-            val tbrow : TableRow = TableRow(activity);
-            val t1v : TextView = TextView(activity);
-            t1v.setText("" + i);
-            t1v.setTextColor(Color.DKGRAY);
-            t1v.setGravity(Gravity.CENTER);
-            tbrow.addView(t1v);
-            val t2v : TextView = TextView(activity);
-            t2v.setText("Product " + i);
-            t2v.setTextColor(Color.DKGRAY);
-            t2v.setGravity(Gravity.CENTER);
-            tbrow.addView(t2v);
-            val t3v : TextView = TextView(activity);
-            t3v.setText("Rs." + i);
-            t3v.setTextColor(Color.DKGRAY);
-            t3v.setGravity(Gravity.CENTER);
-            tbrow.addView(t3v);
-            val t4v : TextView = TextView(activity);
-            t4v.setText("" + i * 15 / 32 * 10);
-            t4v.setTextColor(Color.DKGRAY);
-            t4v.setGravity(Gravity.CENTER);
-            tbrow.addView(t4v);
-            stk.addView(tbrow);
+        val correlationId = FirebaseAuth.getInstance().currentUser!!.uid
+
+        val stk: TableLayout = view.findViewById(R.id.table_main)
+        val tbrow0: TableRow = TableRow(activity)
+        val tv0 : TextView = TextView(activity)
+        tv0.setText(" No. ")
+        tv0.setTextColor(Color.DKGRAY)
+        tbrow0.addView(tv0)
+        val tv1 : TextView = TextView(activity)
+        tv1.setText(" Food ")
+        tv1.setTextColor(Color.DKGRAY)
+        tbrow0.addView(tv1)
+        val tv2 : TextView= TextView(activity)
+        tv2.setText(" Type ")
+        tv2.setTextColor(Color.DKGRAY)
+        tbrow0.addView(tv2)
+        val tv3 : TextView= TextView(activity)
+        tv3.setText("Kcal ")
+        tv3.setTextColor(Color.DKGRAY)
+        tbrow0.addView(tv3)
+        stk.addView(tbrow0)
+
+        GlobalScope.launch {
+            getCaloriesForUserForTodayFromDB(correlationId, OffsetDateTime.now().toLocalDate(), view)
+        }
+
+//        val addFoodFragment = AddFoodFragmentData(
+//            btnAddFood = view.findViewById(R.id.btn_add_food),
+//            calories = view.findViewById(R.id.edit_calories),
+//            foodName = view.findViewById(R.id.edit_food_name)
+//        )
+
+//        addFoodFragment.btnAddFood.setOnClickListener {
+        val btn: Button = view.findViewById(R.id.btn_add_food)
+        btn.setOnClickListener {
+
+            val calories = 500.0
+            val foodName = "food"
+
+//            if (addFoodFragment.calories.text.isNotBlank()) {
+            if (calories != 0.0) {
+//                val foodToAdd = hashMapOf<String, Any?>(
+//                    userId to correlationId,
+//                    calories to addFoodFragment.calories.text.toString(),
+//                    name to addFoodFragment.foodName.text.toString(),
+//                    inputDate to OffsetDateTime.now().toString()
+//                )
+
+                val foodToAdd = hashMapOf<String, Any?>(
+                    userId to correlationId,
+                    DatabaseVariables.calories to calories.toString(),
+                    name to foodName.toString(),
+                    inputDate to OffsetDateTime.now().toLocalDate().toString()
+                )
+
+                FirebaseUtils().firestoreDatabase.collection(foodDatabase)
+                    .add(foodToAdd)
+                    .addOnSuccessListener {
+                        Log.d(TAG, "Added food with ID ${it.id}")
+
+                        GlobalScope.launch {
+                            getCaloriesForUserForTodayFromDB(correlationId, OffsetDateTime.now().toLocalDate(), view)
+                        }
+                    }
+                    .addOnFailureListener { exception ->
+                        Log.w(TAG, "Error adding food $exception")
+                    }
+            }
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun updateFoodConsumedToday(view: View){
+        var currentId = 0
+        var caloriesEatenToday = 0.0
+        if(retrievedFoods != null){
+            retrievedFoods!!.asIterable().forEach{
+                val stk: TableLayout = view.findViewById(R.id.table_main)
+
+                val tbrow : TableRow = TableRow(activity);
+                val t1v : TextView = TextView(activity);
+                t1v.setText(currentId.toString());
+                t1v.setTextColor(Color.DKGRAY);
+                t1v.setGravity(Gravity.CENTER);
+                tbrow.addView(t1v);
+                val t2v : TextView = TextView(activity);
+
+                val caloriesFood: Float = it.data!!.get(DatabaseVariables.calories).toString().toFloat()
+                caloriesEatenToday = caloriesEatenToday.plus(caloriesFood)
+                t2v.setText(caloriesFood.toString());
+                t2v.setTextColor(Color.DKGRAY);
+                t2v.setGravity(Gravity.CENTER);
+                tbrow.addView(t2v);
+                val t3v : TextView = TextView(activity);
+                t3v.setText("Rs." + currentId);
+                t3v.setTextColor(Color.DKGRAY);
+                t3v.setGravity(Gravity.CENTER);
+                tbrow.addView(t3v);
+                val t4v : TextView = TextView(activity);
+                t4v.setText(it.data!!.get(DatabaseVariables.calories).toString());
+                t4v.setTextColor(Color.DKGRAY);
+                t4v.setGravity(Gravity.CENTER);
+                tbrow.addView(t4v);
+                stk.addView(tbrow);
+
+                currentId = currentId.plus(1)
+            }
+
+            val caloriesEatenTodayTv : TextView = view.findViewById(R.id.intake_calories)
+            caloriesEatenTodayTv.setText(caloriesEatenToday.toString() + " Kcal");
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private suspend fun getCaloriesForUserForTodayFromDB(userId: String, currentDate: LocalDate, view: View){
+        retrievedFoods = FirebaseUtils().firestoreDatabase.collection(foodDatabase)
+            .whereEqualTo(DatabaseVariables.userId, userId)
+            .whereEqualTo(inputDate, currentDate.toString())
+            .get()
+            .await()
+            .documents
+
+        mainActivity.runOnUiThread {
+            updateFoodConsumedToday(view)
         }
     }
 }
