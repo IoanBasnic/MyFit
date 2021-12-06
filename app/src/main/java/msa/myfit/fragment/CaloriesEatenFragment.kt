@@ -16,8 +16,11 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import msa.myfit.R
+import msa.myfit.domain.AddFoodFragmentButton
+import msa.myfit.domain.AddFoodFragmentFields
 import msa.myfit.domain.DatabaseVariables
 import msa.myfit.domain.DatabaseVariables.foodDatabase
+import msa.myfit.domain.DatabaseVariables.foodType
 import msa.myfit.domain.DatabaseVariables.inputDate
 import msa.myfit.domain.DatabaseVariables.name
 import msa.myfit.domain.DatabaseVariables.userId
@@ -113,54 +116,12 @@ class CaloriesEatenFragment(mainActivity: AppCompatActivity) : Fragment() {
             )
         }
 
-//        val addFoodFragment = AddFoodFragmentData(
-//            btnAddFood = view.findViewById(R.id.btn_add_food),
-//            calories = view.findViewById(R.id.edit_calories),
-//            foodName = view.findViewById(R.id.edit_food_name)
-//        )
+        val addFoodFragmentButton = AddFoodFragmentButton(
+            btnAddFood = view.findViewById(R.id.btn_add_food)
+        )
 
-//        addFoodFragment.btnAddFood.setOnClickListener {
-        val btn: Button = view.findViewById(R.id.btn_add_food)
-        btn.setOnClickListener {
-            showCustomDialog()
-
-
-            val calories = 500.0
-            val foodName = "food"
-
-//            if (addFoodFragment.calories.text.isNotBlank()) {
-            if (calories != 0.0) {
-//                val foodToAdd = hashMapOf<String, Any?>(
-//                    userId to correlationId,
-//                    calories to addFoodFragment.calories.text.toString(),
-//                    name to addFoodFragment.foodName.text.toString(),
-//                    inputDate to OffsetDateTime.now().toString()
-//                )
-
-                val foodToAdd = hashMapOf<String, Any?>(
-                    userId to correlationId,
-                    DatabaseVariables.calories to calories.toString(),
-                    name to foodName.toString(),
-                    inputDate to OffsetDateTime.now().toLocalDate().toString()
-                )
-
-                FirebaseUtils().firestoreDatabase.collection(foodDatabase)
-                    .add(foodToAdd)
-                    .addOnSuccessListener {
-                        Log.d(TAG, "Added food with ID ${it.id}")
-
-                        GlobalScope.launch {
-                            getCaloriesForUserForTodayFromDB(
-                                correlationId,
-                                OffsetDateTime.now().toLocalDate(),
-                                view
-                            )
-                        }
-                    }
-                    .addOnFailureListener { exception ->
-                        Log.w(TAG, "Error adding food $exception")
-                    }
-            }
+        addFoodFragmentButton.btnAddFood.setOnClickListener {
+            showCustomDialog(correlationId, view)
         }
     }
 
@@ -193,7 +154,12 @@ class CaloriesEatenFragment(mainActivity: AppCompatActivity) : Fragment() {
                 tbrow.addView(t2v);
 
                 val t3v : TextView = TextView(activity);
-                t3v.setText("Rs." + currentId);
+
+                val type = it.data!!.get(DatabaseVariables.foodType)
+                if(type == null)
+                    t3v.setText("")
+                else
+                    t3v.setText(type.toString())
                 t3v.setTextColor(Color.DKGRAY);
                 t3v.setGravity(Gravity.CENTER);
                 tbrow.addView(t3v);
@@ -231,23 +197,53 @@ class CaloriesEatenFragment(mainActivity: AppCompatActivity) : Fragment() {
         }
     }
 
-    fun showCustomDialog() {
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun showCustomDialog(correlationId: String, view: View) {
         val dialog = activity?.let { Dialog(it) }
         //We have added a title in the custom layout. So let's disable the default title.
         dialog!!.requestWindowFeature(Window.FEATURE_NO_TITLE)
         //The user will be able to cancel the dialog bu clicking anywhere outside the dialog.
-        dialog!!.setCancelable(true)
+        dialog.setCancelable(true)
         //Mention the name of the layout of your custom dialog.
-        dialog!!.setContentView(R.layout.custom_dialog)
+        dialog.setContentView(R.layout.custom_dialog)
 
         //Initializing the views of the dialog.
-        val nameEt: EditText = dialog!!.findViewById(R.id.food_et)
-        val typeEt: EditText = dialog!!.findViewById(R.id.type_et)
-        val ageEt: EditText = dialog!!.findViewById(R.id.calories_et)
-        val submitButton: Button = dialog!!.findViewById(R.id.submit_button)
+        val addFoodFragmentFields = AddFoodFragmentFields(
+            calories = dialog.findViewById(R.id.calories_et),
+            foodName = dialog.findViewById(R.id.food_et),
+            foodType = dialog.findViewById(R.id.type_et)
+        )
+
+        val submitButton: Button = dialog.findViewById(R.id.submit_button)
         submitButton.setOnClickListener {
-            val name = nameEt.text.toString()
-            val age = ageEt.text.toString()
+
+            if (addFoodFragmentFields.calories.text.isNotBlank()) {
+                val foodToAdd = hashMapOf<String, Any?>(
+                    userId to correlationId,
+                    DatabaseVariables.calories to addFoodFragmentFields.calories.text.toString(),
+                    DatabaseVariables.name to addFoodFragmentFields.foodName.text.toString(),
+                    foodType to addFoodFragmentFields.foodType.text.toString(),
+                    inputDate to OffsetDateTime.now().toLocalDate().toString()
+                )
+
+                FirebaseUtils().firestoreDatabase.collection(foodDatabase)
+                    .add(foodToAdd)
+                    .addOnSuccessListener {
+                        Log.d(TAG, "Added food with ID ${it.id}")
+
+                        GlobalScope.launch {
+                            getCaloriesForUserForTodayFromDB(
+                                correlationId,
+                                OffsetDateTime.now().toLocalDate(),
+                                view
+                            )
+                        }
+                    }
+                    .addOnFailureListener { exception ->
+                        Log.w(TAG, "Error adding food $exception")
+                    }
+            }
+
             if (dialog != null) {
                 dialog.dismiss()
             }
