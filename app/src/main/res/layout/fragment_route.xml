@@ -25,7 +25,7 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/calories_eaten"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_rowWeight="1"
             android:layout_columnWeight="1"
@@ -35,7 +35,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="178dp"
+                android:layout_height="444dp"
                 android:layout_gravity="center"
                 android:orientation="vertical"
                 android:padding="16dp">
@@ -43,28 +43,7 @@
                 <FrameLayout
                     android:id="@+id/GoogleMapsFragment"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-                </FrameLayout>
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_gravity="center"-->
-<!--                    android:layout_marginTop="12dp"-->
-<!--                    android:text="Your calorie intake:"-->
-<!--                    android:textAlignment="center"-->
-<!--                    android:textColor="#6f6f6f"-->
-<!--                    android:textSize="36sp" />-->
-
-<!--                <TextView-->
-<!--                    android:id="@+id/intake_calories"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_gravity="center"-->
-<!--                    android:layout_marginTop="12dp"-->
-<!--                    android:text="0 Kcal"-->
-<!--                    android:textAlignment="center"-->
-<!--                    android:textColor="#6f6f6f"-->
-<!--                    android:textSize="18sp" />-->
+                    android:layout_height="545dp"></FrameLayout>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
     </GridLayout>
@@ -92,17 +71,7 @@
             android:layout_columnWeight="1"
             android:layout_margin="12dp"
             app:cardCornerRadius="12dp"
-            app:cardElevation="6dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="221dp"
-                android:layout_gravity="center"
-                android:orientation="vertical"
-                android:padding="16dp">
-
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
+            app:cardElevation="6dp"/>
 
     </GridLayout>
 
@@ -117,7 +86,7 @@
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/gridLayout2"
-        app:layout_constraintVertical_bias="0.24"
+        app:layout_constraintVertical_bias="0.0"
         app:spinning_bar_color="#FFF"
         app:spinning_bar_padding="6dp"
         app:spinning_bar_width="4dp" />
