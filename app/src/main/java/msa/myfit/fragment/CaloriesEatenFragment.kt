@@ -1,17 +1,12 @@
 package msa.myfit.fragment
 
+import android.app.Dialog
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TableLayout
-import android.widget.TableRow
-import android.widget.TextView
+import android.view.*
+import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -127,6 +122,8 @@ class CaloriesEatenFragment(mainActivity: AppCompatActivity) : Fragment() {
 //        addFoodFragment.btnAddFood.setOnClickListener {
         val btn: Button = view.findViewById(R.id.btn_add_food)
         btn.setOnClickListener {
+            showCustomDialog()
+
 
             val calories = 500.0
             val foodName = "food"
@@ -231,6 +228,32 @@ class CaloriesEatenFragment(mainActivity: AppCompatActivity) : Fragment() {
 
         mainActivity.runOnUiThread {
             updateFoodConsumedToday(view)
+        }
+    }
+
+    fun showCustomDialog() {
+        val dialog = activity?.let { Dialog(it) }
+        //We have added a title in the custom layout. So let's disable the default title.
+        dialog!!.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        //The user will be able to cancel the dialog bu clicking anywhere outside the dialog.
+        dialog!!.setCancelable(true)
+        //Mention the name of the layout of your custom dialog.
+        dialog!!.setContentView(R.layout.custom_dialog)
+
+        //Initializing the views of the dialog.
+        val nameEt: EditText = dialog!!.findViewById(R.id.food_et)
+        val typeEt: EditText = dialog!!.findViewById(R.id.type_et)
+        val ageEt: EditText = dialog!!.findViewById(R.id.calories_et)
+        val submitButton: Button = dialog!!.findViewById(R.id.submit_button)
+        submitButton.setOnClickListener {
+            val name = nameEt.text.toString()
+            val age = ageEt.text.toString()
+            if (dialog != null) {
+                dialog.dismiss()
+            }
+        }
+        if (dialog != null) {
+            dialog.show()
         }
     }
 }
