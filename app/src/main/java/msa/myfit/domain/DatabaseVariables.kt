@@ -18,6 +18,7 @@ object DatabaseVariables {
     val userId = "user_id"
     val calories = "calories"
     val name = "name"
+    val foodType = "type"
     val inputDate = "input_date"
 
 }
