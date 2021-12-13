@@ -180,7 +180,7 @@
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:layout_gravity="center"
-                    android:src="@drawable/scale" />
+                    android:src="@drawable/route" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -240,7 +240,7 @@
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:layout_gravity="center"
-                    android:src="@drawable/overview" />
+                    android:src="@drawable/scale" />
 
                 <TextView
                     android:layout_width="wrap_content"
