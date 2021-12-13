@@ -51,7 +51,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="12dp"
-                    android:text="Calories\neaten"
+                    android:text="Set weight goal"
                     android:textAlignment="center"
                     android:textColor="#6f6f6f"
                     android:textSize="18sp" />
@@ -96,7 +96,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="12dp"
-                    android:text="Plan your\nroute"
+                    android:text="Set today's weight"
                     android:textAlignment="center"
                     android:textColor="#6f6f6f"
                     android:textSize="18sp" />
@@ -134,14 +134,14 @@
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:layout_gravity="center"
-                    android:src="@drawable/route" />
+                    android:src="@drawable/calories_eaten" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="12dp"
-                    android:text="Plan your\nroute"
+                    android:text="Diet overview"
                     android:textAlignment="center"
                     android:textColor="#6f6f6f"
                     android:textSize="18sp" />
@@ -187,7 +187,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="12dp"
-                    android:text="Plan your\nroute"
+                    android:text="Workout overview"
                     android:textAlignment="center"
                     android:textColor="#6f6f6f"
                     android:textSize="18sp" />
@@ -247,7 +247,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="12dp"
-                    android:text="Overview over your\n weight, diet and workout"
+                    android:text="Weight overview"
                     android:textAlignment="center"
                     android:textColor="#6f6f6f"
                     android:textSize="14sp" />
