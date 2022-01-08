@@ -117,7 +117,8 @@
                     android:text="15:53"
                     android:textAlignment="center"
                     android:textColor="#6f6f6f"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:id="@+id/route_duration"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -162,7 +163,8 @@
                     android:text="15 km"
                     android:textAlignment="center"
                     android:textColor="#6f6f6f"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:id="@+id/route_length"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -207,7 +209,8 @@
                     android:text="340 kcal"
                     android:textAlignment="center"
                     android:textColor="#6f6f6f"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:id="@+id/route_calories"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -253,7 +256,8 @@
                     android:text="1341 points"
                     android:textAlignment="center"
                     android:textColor="#6f6f6f"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:id="@+id/route_score"/>
 
                 <TextView
                     android:layout_width="wrap_content"

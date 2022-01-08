@@ -1,5 +1,7 @@
 package msa.myfit.domain
 
+import java.time.Duration
+
 object DatabaseVariables {
     //user profile
     //database name
@@ -15,10 +17,21 @@ object DatabaseVariables {
     //calories eaten
     //database name
     val foodDatabase = "calories_intake"
+    //variables
     val userId = "user_id"
     val calories = "calories"
     val name = "name"
     val foodType = "type"
     val inputDate = "input_date"
 
+    //route result
+    //database name
+    val routeDatabase = "route"
+    //variables
+    //val userId = "user_id"
+    val routeTime = "route_time"
+    val distanceInKm = "distance_km"
+    val caloriesBurnt = "calories_burnt"
+    val pointsEarned = "points_earned"
+    val startDate = "start_date"
 }

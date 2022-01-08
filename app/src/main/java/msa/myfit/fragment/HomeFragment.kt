@@ -93,7 +93,7 @@ class HomeFragment(mainActivity: MainActivity) : Fragment() {
             var fragment: Fragment? = null
             when (view.id) {
                 R.id.routes  -> {
-                    fragment = RouteFragment(null)
+                    fragment = RouteFragment(mainActivity)
                     replaceFragment(fragment)
                 }
             }

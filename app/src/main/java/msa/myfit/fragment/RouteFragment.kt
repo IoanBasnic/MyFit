@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.GridLayout
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import msa.myfit.R
@@ -21,7 +22,7 @@ private const val ARG_PARAM2 = "param2"
  * Use the [RouteFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class RouteFragment(mainActivity: FinishRouteFragment?) : Fragment() {
+class RouteFragment(mainActivity: AppCompatActivity) : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -58,7 +59,7 @@ class RouteFragment(mainActivity: FinishRouteFragment?) : Fragment() {
             btnStartRoute.setOnClickListener {
                 btnStartRoute.setText("Start route")
                 var fragment: Fragment? = null
-                fragment =FinishRouteFragment()
+                fragment = FinishRouteFragment(mainActivity)
                 replaceFragment(fragment)
             }
         }
