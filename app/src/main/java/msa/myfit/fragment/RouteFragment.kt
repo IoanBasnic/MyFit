@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.GridLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import msa.myfit.R
@@ -19,10 +21,12 @@ private const val ARG_PARAM2 = "param2"
  * Use the [RouteFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class RouteFragment : Fragment() {
+class RouteFragment(mainActivity: FinishRouteFragment?) : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+
+    private val mainActivity = mainActivity
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,25 +49,27 @@ class RouteFragment : Fragment() {
         val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
         transaction.replace(R.id.GoogleMapsFragment, childFragment).commit()
 
+        val btnStartRoute : Button = view.findViewById(R.id.btn_start_route)
+
+        btnStartRoute.setOnClickListener {
+            btnStartRoute.setText("Finish route")
+            val gridLayout: GridLayout = view.findViewById(R.id.gridLayout3)
+            gridLayout.setVisibility(View.VISIBLE)
+            btnStartRoute.setOnClickListener {
+                btnStartRoute.setText("Start route")
+                var fragment: Fragment? = null
+                fragment =FinishRouteFragment()
+                replaceFragment(fragment)
+            }
+        }
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment RouteFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            RouteFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    fun replaceFragment(someFragment: Fragment?) {
+        val transaction: FragmentTransaction = requireFragmentManager().beginTransaction()
+        if (someFragment != null) {
+            transaction.replace(R.id.HomeFragmentId, someFragment)
+        }
+        transaction.addToBackStack(null)
+        transaction.commit()
     }
 }
