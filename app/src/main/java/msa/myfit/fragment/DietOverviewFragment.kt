@@ -8,6 +8,10 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.anychart.anychart.AnyChart
+import com.anychart.anychart.AnyChartView
+import com.anychart.anychart.DataEntry
+import com.anychart.anychart.ValueDataEntry
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import kotlinx.coroutines.GlobalScope
@@ -56,29 +60,8 @@ class DietOverviewFragment(mainActivity: AppCompatActivity) : Fragment() {
         // Inflate the layout for this fragment
 
         //TODO: create fragment
-        return inflater.inflate(R.layout.fragment_overview, container, false)
+        return inflater.inflate(R.layout.fragment_diet_overview, container, false)
     }
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment DietOverviewFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            OverviewFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
-    }
-
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -125,6 +108,17 @@ class DietOverviewFragment(mainActivity: AppCompatActivity) : Fragment() {
             }
         }
 
+        val pie = AnyChart.line()
+
+        val data: MutableList<DataEntry> = ArrayList()
+        data.add(ValueDataEntry("John", 10000))
+        data.add(ValueDataEntry("Jake", 12000))
+        data.add(ValueDataEntry("Peter", 18000))
+
+        pie.data(data)
+
+        val anyChartView : AnyChartView = view.findViewById(R.id.any_chart_view)
+        anyChartView.setChart(pie)
     }
 
 

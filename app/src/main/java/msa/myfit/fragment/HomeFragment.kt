@@ -103,7 +103,7 @@ class HomeFragment(mainActivity: MainActivity) : Fragment() {
             var fragment: Fragment? = null
             when (view.id) {
                 R.id.overview  -> {
-                    fragment = OverviewFragment()
+                    fragment = OverviewFragment(mainActivity)
                     replaceFragment(fragment)
                 }
             }
