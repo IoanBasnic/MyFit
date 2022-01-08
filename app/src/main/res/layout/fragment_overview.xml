@@ -24,7 +24,7 @@
         app:layout_constraintVertical_bias="0.14">
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/calories_eaten"
+            android:id="@+id/set_goal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_rowWeight="1"
@@ -69,7 +69,7 @@
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/routes"
+            android:id="@+id/set_today_goal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_rowWeight="1"
@@ -114,7 +114,7 @@
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/routess"
+            android:id="@+id/diet_overview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_rowWeight="1"
@@ -160,7 +160,7 @@
 
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/routesss"
+            android:id="@+id/workout_overview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_rowWeight="1"
@@ -220,7 +220,7 @@
         app:layout_constraintVertical_bias="0.067">
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/overview"
+            android:id="@+id/weight_overview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_rowWeight="1"
