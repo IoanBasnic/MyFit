@@ -5,6 +5,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.anychart.anychart.AnyChart
+import com.anychart.anychart.AnyChartView
+import com.anychart.anychart.DataEntry
+import com.anychart.anychart.ValueDataEntry
 import msa.myfit.R
 
 // TODO: Rename parameter arguments, choose names that match
@@ -36,6 +40,20 @@ class WeightOverviewFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_weight_overview, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val pie = AnyChart.pie()
+
+        val data: MutableList<DataEntry> = ArrayList()
+        data.add(ValueDataEntry("John", 10000))
+        data.add(ValueDataEntry("Jake", 12000))
+        data.add(ValueDataEntry("Peter", 18000))
+
+        pie.data(data)
+
+        val anyChartView = view.findViewById(R.id.any_chart_view) as AnyChartView
+        anyChartView.setChart(pie)
     }
 
     companion object {

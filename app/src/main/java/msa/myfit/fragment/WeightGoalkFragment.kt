@@ -1,11 +1,14 @@
 package msa.myfit.fragment
 
+import android.graphics.Paint.Align
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import com.anychart.anychart.*
 import msa.myfit.R
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -28,6 +31,7 @@ class WeightGoalkFragment : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+
     }
 
     override fun onCreateView(
@@ -36,6 +40,20 @@ class WeightGoalkFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_weight_goalk, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val pie = AnyChart.line()
+
+        val data: MutableList<DataEntry> = ArrayList()
+        data.add(ValueDataEntry("John", 10000))
+        data.add(ValueDataEntry("Jake", 12000))
+        data.add(ValueDataEntry("Peter", 18000))
+
+        pie.data(data)
+
+        val anyChartView = view.findViewById(R.id.any_chart_view) as AnyChartView
+        anyChartView.setChart(pie)
     }
 
     companion object {
