@@ -43,7 +43,8 @@
                 <FrameLayout
                     android:id="@+id/GoogleMapsFragment"
                     android:layout_width="match_parent"
-                    android:layout_height="545dp"></FrameLayout>
+                    android:layout_height="545dp">
+                </FrameLayout>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
     </GridLayout>
@@ -75,6 +76,66 @@
 
     </GridLayout>
 
+    <GridLayout
+        android:id="@+id/gridLayout3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:alignmentMode="alignMargins"
+        android:columnCount="2"
+        android:columnOrderPreserved="false"
+        android:rowCount="2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints"
+        android:visibility="invisible">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Time:" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="00:00" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Distance:" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0 km" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+    </GridLayout>
     <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
         android:id="@+id/btn_start_route"
         style="@style/loginButton"
