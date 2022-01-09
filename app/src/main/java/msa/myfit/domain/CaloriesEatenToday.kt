@@ -8,3 +8,9 @@ data class CaloriesEatenToday(
     val dayOfWeek: DayOfWeek,
     val dateTime: LocalDate
 )
+
+data class WeightToday(
+    val weight: Float,
+    val dayOfWeek: DayOfWeek,
+    val dateTime: LocalDate
+)

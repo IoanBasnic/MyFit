@@ -43,7 +43,6 @@ class DietOverviewFragment(mainActivity: AppCompatActivity) : Fragment() {
     private val mainActivity = mainActivity
     private var retrievedFoods: MutableList<DocumentSnapshot>? = null
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -57,8 +56,6 @@ class DietOverviewFragment(mainActivity: AppCompatActivity) : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-
-        //TODO: create fragment
         return inflater.inflate(R.layout.fragment_diet_overview, container, false)
     }
 

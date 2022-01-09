@@ -39,6 +39,7 @@ class OverviewFragment(mainActivity: AppCompatActivity) : Fragment() {
     private var param2: String? = null
     private val mainActivity = mainActivity
     var existingDocuments: MutableList<DocumentSnapshot>? = null
+    var existingWeightGoal: MutableList<DocumentSnapshot>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,6 +61,12 @@ class OverviewFragment(mainActivity: AppCompatActivity) : Fragment() {
             Log.i("tag","Retrieved existing document $existingDocuments with correlation id $correlationId")
         }
 
+        GlobalScope.launch {
+            existingWeightGoal = getWeightGoalsForUserForTodayFromDb(correlationId, OffsetDateTime.now().toLocalDate())
+            Log.i("tag","Retrieved existing document $existingDocuments with correlation id $correlationId")
+        }
+
+
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_overview, container, false)
     }
@@ -74,9 +81,10 @@ class OverviewFragment(mainActivity: AppCompatActivity) : Fragment() {
 
         setGoal.setOnClickListener { view ->
             var fragment: Fragment? = null
+            TimeUnit.SECONDS.sleep(1L)
             when (view.id) {
                 R.id.set_goal  -> {
-                    fragment = WeightGoalFragment()
+                    fragment = WeightGoalFragment(mainActivity, existingWeightGoal)
                     replaceFragment(fragment)
                 }
             }
@@ -117,7 +125,7 @@ class OverviewFragment(mainActivity: AppCompatActivity) : Fragment() {
             var fragment: Fragment? = null
             when (view.id) {
                 R.id.weight_overview  -> {
-                    fragment = WeightOverviewFragment()
+                    fragment = WeightOverviewFragment(mainActivity)
                     replaceFragment(fragment)
                 }
             }
@@ -133,12 +141,18 @@ class OverviewFragment(mainActivity: AppCompatActivity) : Fragment() {
         transaction.commit()
     }
 
-
-
     private suspend fun getWeightsForUserForTodayFromDb(correlationId: String, currentDate: LocalDate): MutableList<DocumentSnapshot> {
         return FirebaseUtils().firestoreDatabase.collection(DatabaseVariables.weightForToday)
             .whereEqualTo(DatabaseVariables.userId, correlationId)
             .whereEqualTo(DatabaseVariables.inputDate, currentDate.toString())
+            .get()
+            .await()
+            .documents
+    }
+
+    private suspend fun getWeightGoalsForUserForTodayFromDb(correlationId: String, currentDate: LocalDate): MutableList<DocumentSnapshot> {
+        return FirebaseUtils().firestoreDatabase.collection(DatabaseVariables.weightGoal)
+            .whereEqualTo(DatabaseVariables.userId, correlationId)
             .get()
             .await()
             .documents
