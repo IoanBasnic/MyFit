@@ -8,8 +8,13 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.anychart.anychart.*
-import com.anychart.anychart.AnyChart.cartesian
+import com.anychart.AnyChart
+import com.anychart.AnyChartView
+import com.anychart.chart.common.dataentry.DataEntry
+import com.anychart.chart.common.dataentry.ValueDataEntry
+import com.anychart.core.cartesian.series.Line
+import com.anychart.enums.Anchor
+import com.anychart.enums.MarkerType
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import kotlinx.coroutines.GlobalScope
@@ -185,18 +190,41 @@ class WeightOverviewFragment(mainActivity: AppCompatActivity) : Fragment() {
                     )
                 )
 
-                goalData.add(
-                    ValueDataEntry(
-                        daysOfTheWeek.get(weight.dayOfWeek.name),
-                        retrievedGoal!![0].data!!.get(DatabaseVariables.weight).toString().toDouble()
+                if(retrievedGoal != null) {
+                    goalData.add(
+                        ValueDataEntry(
+                            daysOfTheWeek.get(weight.dayOfWeek.name),
+                            retrievedGoal!![0].data!!.get(DatabaseVariables.weight).toString()
+                                .toDouble()
+                        )
                     )
-                )
+                }
             }
 
-            pie.data(data)
+            val series1: Line = pie.line(data)
+            series1.name("Weight")
+            series1.hovered().markers().enabled(true)
+            series1.hovered().markers()
+                .type(MarkerType.CIRCLE)
+                .size(4.0)
+            series1.tooltip()
+                .position("right")
+                .anchor(Anchor.LEFT_CENTER)
+                .offsetX(5.0)
+                .offsetY(5.0)
 
-            //TODO: also add line for goal weight
-//            pie.addSeries(goalData)
+            val series2: Line = pie.line(goalData)
+            series2
+            series2.name("Weight goal")
+            series2.hovered().markers().enabled(true)
+            series2.hovered().markers()
+                .type(MarkerType.CIRCLE)
+                .size(4.0)
+            series2.tooltip()
+                .position("right")
+                .anchor(Anchor.LEFT_CENTER)
+                .offsetX(5.0)
+                .offsetY(5.0)
 
             val anyChartView : AnyChartView = view.findViewById(R.id.any_chart_view)
             anyChartView.setChart(pie)
