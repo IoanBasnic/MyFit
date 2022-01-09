@@ -34,4 +34,12 @@ object DatabaseVariables {
     val caloriesBurnt = "calories_burnt"
     val pointsEarned = "points_earned"
     val startDate = "start_date"
+
+    //weight for today
+    //database name
+    val weightForToday = "weights"
+    //variables
+    //val userId = "user_id"
+    val weight = "weight"
+//    val inputDate = "input_date"
 }

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".fragment.TodayGoalFragment">
+    tools:context=".fragment.TodayWeightFragment">
 
     <GridLayout
         android:id="@+id/gridLayout"
@@ -43,32 +43,10 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="12dp"
-                    android:text="Your goal today"
+                    android:text="Your weight today"
                     android:textAlignment="center"
                     android:textColor="#6f6f6f"
                     android:textSize="36sp" />
-
-                <TextView
-                    android:id="@+id/calories_goal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="12dp"
-                    android:text="0 Kcal"
-                    android:textAlignment="center"
-                    android:textColor="#6f6f6f"
-                    android:textSize="18sp" />
-
-                <TextView
-                    android:id="@+id/weight_goal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="12dp"
-                    android:text="0 Kcal"
-                    android:textAlignment="center"
-                    android:textColor="#6f6f6f"
-                    android:textSize="18sp" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
     </GridLayout>
@@ -108,20 +86,9 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Calories goal - kcal">
+                    android:hint="What is your weight today in Kg?">
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/edit_kcal"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:text="20"/>
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Weight goal - kg">
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/edit_weight"
+                        android:id="@+id/edit_weight_for_today"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:text="20"/>
@@ -132,10 +99,10 @@
     </GridLayout>
 
     <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
-        android:id="@+id/btn_set_goal_today"
+        android:id="@+id/btn_set_weight_today"
         style="@style/loginButton"
         android:layout_gravity="center_horizontal"
-        android:text="Set your goal"
+        android:text="Set your weight"
         app:initialCornerAngle="27dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
