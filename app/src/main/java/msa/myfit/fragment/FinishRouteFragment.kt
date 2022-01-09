@@ -134,7 +134,7 @@ class FinishRouteFragment(mainActivity: AppCompatActivity) : Fragment() {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun computeCaloriesBurnt(routeTime: Duration, currentKg: Float): Double{
+    private fun computeCaloriesBurnt(routeTime: Duration, currentKg: Float): Double {
         //Duration (in minutes)*(MET*3.5*weight in kg)/200
         return routeTime.toMinutes().times(4).times(3.5).times(currentKg).div(200)
     }

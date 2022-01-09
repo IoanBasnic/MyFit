@@ -5,10 +5,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.anychart.anychart.AnyChart
-import com.anychart.anychart.AnyChartView
-import com.anychart.anychart.DataEntry
-import com.anychart.anychart.ValueDataEntry
+import com.anychart.AnyChart
+import com.anychart.AnyChartView
+import com.anychart.chart.common.dataentry.DataEntry
+import com.anychart.chart.common.dataentry.ValueDataEntry
 import msa.myfit.R
 
 // TODO: Rename parameter arguments, choose names that match
