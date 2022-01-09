@@ -1,12 +1,25 @@
 package msa.myfit.fragment
 
+import android.os.Build
 import android.os.Bundle
+import android.text.TextUtils
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
+import android.widget.Toast
+import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.anychart.anychart.*
+import androidx.fragment.app.FragmentTransaction
+import com.google.android.material.textfield.TextInputEditText
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentSnapshot
 import msa.myfit.R
+import msa.myfit.domain.DatabaseVariables
+import msa.myfit.firebase.FirebaseUtils
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -19,10 +32,13 @@ private const val ARG_PARAM2 = "param2"
  * Use the [WeightGoalFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class WeightGoalFragment : Fragment() {
+class WeightGoalFragment(mainActivity: AppCompatActivity, existingDocuments: MutableList<DocumentSnapshot>?) : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+
+    private val mainActivity = mainActivity
+    private var existingDocuments: MutableList<DocumentSnapshot>? = existingDocuments
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,22 +53,14 @@ class WeightGoalFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_weight_goal, container, false)
-    }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val pie = AnyChart.line()
+        if(existingDocuments.isNullOrEmpty()){
+            // Inflate the layout for this fragment
+            return inflater.inflate(R.layout.fragment_weight_goal, container, false)
+        }
 
-        val data: MutableList<DataEntry> = ArrayList()
-        data.add(ValueDataEntry("John", 10000))
-        data.add(ValueDataEntry("Jake", 12000))
-        data.add(ValueDataEntry("Peter", 18000))
+        return inflater.inflate(R.layout.fragment_weight_goal_already_inputted, container, false)
 
-        pie.data(data)
-
-        val anyChartView = view.findViewById(R.id.any_chart_view) as AnyChartView
-        anyChartView.setChart(pie)
     }
 
     companion object {
@@ -66,12 +74,81 @@ class WeightGoalFragment : Fragment() {
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            WeightGoalFragment().apply {
+        fun newInstance(param1: String, param2: String, mainActivity: AppCompatActivity, existingDocuments: MutableList<DocumentSnapshot>?) =
+            WeightGoalFragment(mainActivity, existingDocuments).apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)
                 }
             }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        if(!existingDocuments.isNullOrEmpty()){
+            val textView: TextView = view.findViewById(R.id.weight_goal_already_inputted)
+
+            val existingDocument = existingDocuments!![0]
+            if(existingDocument != null){
+                textView.setText(existingDocument.data!![DatabaseVariables.weight].toString() + " Kg")
+            }
+        }
+        else{
+            val correlationId = FirebaseAuth.getInstance().currentUser!!.uid
+
+            val setWeightTodayBtn: Button = view.findViewById(R.id.btn_set_weight_goal)
+            val weightToday: TextInputEditText = view.findViewById(R.id.edit_weight_goal_for_today)
+
+            setWeightTodayBtn.setOnClickListener {
+                val weightToSave = weightToday.text.toString().trim { it <= ' '}
+
+                when{
+                    TextUtils.isEmpty(weightToSave) -> {
+                        Toast.makeText(
+                            mainActivity,
+                            "Please enter your weight goal for today",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+
+                    !TextUtils.isDigitsOnly(weightToSave) -> {
+                        Toast.makeText(
+                            mainActivity,
+                            "Please enter only digits for your weight",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                    else -> {
+                        val weightGoalToAdd = hashMapOf<String, Any?>(
+                            DatabaseVariables.userId to correlationId,
+                            DatabaseVariables.weight to weightToSave
+                        )
+
+                        FirebaseUtils().firestoreDatabase.collection(DatabaseVariables.weightGoal)
+                            .add(weightGoalToAdd)
+                            .addOnSuccessListener {
+                                Log.d(TAG, "Added weight goal with ID ${it.id}")
+
+                                var fragment: Fragment? = HomeFragment(mainActivity)
+                                replaceFragment(fragment)
+                            }
+                            .addOnFailureListener { exception ->
+                                Log.w(TAG, "Error adding weight goal $exception")
+                            }
+                    }
+                }
+            }
+        }
+    }
+
+    fun replaceFragment(someFragment: Fragment?) {
+        val transaction: FragmentTransaction = requireFragmentManager().beginTransaction()
+        if (someFragment != null) {
+            transaction.replace(R.id.HomeFragmentId, someFragment)
+        }
+        transaction.addToBackStack(null)
+        transaction.commit()
     }
 }

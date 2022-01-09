@@ -41,5 +41,11 @@ object DatabaseVariables {
     //variables
     //val userId = "user_id"
     val weight = "weight"
-//    val inputDate = "input_date"
+    //val inputDate = "input_date"
+
+    //weight goal
+    val weightGoal = "weight_goal"
+    //variables
+    //val userId = "user_id"
+    //val weight = "weight"
 }
