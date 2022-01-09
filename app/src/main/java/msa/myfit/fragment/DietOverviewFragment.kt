@@ -22,7 +22,6 @@ import msa.myfit.domain.CaloriesEatenToday
 import msa.myfit.domain.DatabaseVariables
 import msa.myfit.firebase.FirebaseUtils
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 
@@ -74,54 +73,10 @@ class DietOverviewFragment(mainActivity: AppCompatActivity) : Fragment() {
                 view
             )
         }
-
-        val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-
-        //the list is the other way around, index 6 is the first chronological date and 0 is the last
-        val caloriesEatenThisWeek: MutableList<CaloriesEatenToday> = mutableListOf()
-
-        val currentDate = LocalDate.now()
-        caloriesEatenThisWeek.add(CaloriesEatenToday(0.0f, currentDate.dayOfWeek, currentDate))
-        caloriesEatenThisWeek.add(CaloriesEatenToday(0.0f, currentDate.dayOfWeek.minus(1), currentDate.minusDays(1)))
-        caloriesEatenThisWeek.add(CaloriesEatenToday(0.0f, currentDate.dayOfWeek.minus(2), currentDate.minusDays(2)))
-        caloriesEatenThisWeek.add(CaloriesEatenToday(0.0f, currentDate.dayOfWeek.minus(3), currentDate.minusDays(3)))
-        caloriesEatenThisWeek.add(CaloriesEatenToday(0.0f, currentDate.dayOfWeek.minus(4), currentDate.minusDays(4)))
-        caloriesEatenThisWeek.add(CaloriesEatenToday(0.0f, currentDate.dayOfWeek.minus(5), currentDate.minusDays(5)))
-        caloriesEatenThisWeek.add(CaloriesEatenToday(0.0f, currentDate.dayOfWeek.minus(6), currentDate.minusDays(6)))
-
-
-        if(retrievedFoods != null){
-            retrievedFoods!!.asIterable().forEach {
-                val date = LocalDate.parse(it.data!!.get(DatabaseVariables.inputDate).toString(), formatter)
-
-                val dateDifference = LocalDate.now().dayOfYear.minus(date.dayOfYear)
-                if(dateDifference < 7) {
-                    val caloriesEatenToday = caloriesEatenThisWeek.get(dateDifference)
-
-                    val calories = caloriesEatenToday.calorieSum + it.data!!.get(DatabaseVariables.calories).toString().toFloat()
-
-                    caloriesEatenThisWeek.set(
-                        dateDifference,
-                        CaloriesEatenToday(calories,caloriesEatenToday.dayOfWeek, caloriesEatenToday.dateTime)
-                    )
-                }
-            }
-        }
-
-        val pie = AnyChart.line()
-
-        val data: MutableList<DataEntry> = ArrayList()
-        data.add(ValueDataEntry("John", 10000))
-        data.add(ValueDataEntry("Jake", 12000))
-        data.add(ValueDataEntry("Peter", 18000))
-
-        pie.data(data)
-
-        val anyChartView : AnyChartView = view.findViewById(R.id.any_chart_view)
-        anyChartView.setChart(pie)
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private suspend fun getCaloriesForUserForTodayFromDB(
         userId: String,
         currentDate: LocalDate,
@@ -135,7 +90,60 @@ class DietOverviewFragment(mainActivity: AppCompatActivity) : Fragment() {
             .documents
 
         mainActivity.runOnUiThread {
-            //TODO: update data exposed on page
+            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+            //the list is the other way around, index 6 is the first chronological date and 0 is the last
+            val caloriesEatenThisWeek: MutableList<CaloriesEatenToday> = mutableListOf()
+
+            val currentDate = LocalDate.now()
+            caloriesEatenThisWeek.add(CaloriesEatenToday(0.0f, currentDate.dayOfWeek, currentDate))
+            caloriesEatenThisWeek.add(CaloriesEatenToday(0.0f, currentDate.dayOfWeek.minus(1), currentDate.minusDays(1)))
+            caloriesEatenThisWeek.add(CaloriesEatenToday(0.0f, currentDate.dayOfWeek.minus(2), currentDate.minusDays(2)))
+            caloriesEatenThisWeek.add(CaloriesEatenToday(0.0f, currentDate.dayOfWeek.minus(3), currentDate.minusDays(3)))
+            caloriesEatenThisWeek.add(CaloriesEatenToday(0.0f, currentDate.dayOfWeek.minus(4), currentDate.minusDays(4)))
+            caloriesEatenThisWeek.add(CaloriesEatenToday(0.0f, currentDate.dayOfWeek.minus(5), currentDate.minusDays(5)))
+            caloriesEatenThisWeek.add(CaloriesEatenToday(0.0f, currentDate.dayOfWeek.minus(6), currentDate.minusDays(6)))
+
+
+            if(retrievedFoods != null){
+                retrievedFoods!!.asIterable().forEach {
+                    val date = LocalDate.parse(it.data!!.get(DatabaseVariables.inputDate).toString(), formatter)
+
+                    val dateDifference = LocalDate.now().dayOfYear.minus(date.dayOfYear)
+                    if(dateDifference < 7) {
+                        val caloriesEatenToday = caloriesEatenThisWeek.get(dateDifference)
+
+                        val calories = caloriesEatenToday.calorieSum + it.data!!.get(DatabaseVariables.calories).toString().toFloat()
+
+                        caloriesEatenThisWeek.set(
+                            dateDifference,
+                            CaloriesEatenToday(calories,caloriesEatenToday.dayOfWeek, caloriesEatenToday.dateTime)
+                        )
+                    }
+                }
+            }
+
+            val pie = AnyChart.line()
+            val data: MutableList<DataEntry> = ArrayList()
+
+            val daysOfTheWeek = hashMapOf(
+                "MONDAY" to "Mon",
+                "TUESDAY" to "Tue",
+                "WEDNESDAY" to "Wed",
+                "THURSDAY" to "Thu",
+                "FRIDAY" to "Fri",
+                "SATURDAY" to "Sat",
+                "SUNDAY" to "Sun"
+            )
+
+            for(calories in caloriesEatenThisWeek.asReversed()){
+                data.add(ValueDataEntry(daysOfTheWeek.get(calories.dayOfWeek.name), calories.calorieSum.toDouble()))
+            }
+
+            pie.data(data)
+
+            val anyChartView : AnyChartView = view.findViewById(R.id.any_chart_view)
+            anyChartView.setChart(pie)
         }
     }
 }

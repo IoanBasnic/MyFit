@@ -76,7 +76,7 @@ class OverviewFragment(mainActivity: AppCompatActivity) : Fragment() {
             var fragment: Fragment? = null
             when (view.id) {
                 R.id.set_goal  -> {
-                    fragment = WeightGoalkFragment()
+                    fragment = WeightGoalFragment()
                     replaceFragment(fragment)
                 }
             }
