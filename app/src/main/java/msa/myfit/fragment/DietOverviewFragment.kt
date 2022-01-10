@@ -13,7 +13,6 @@ import com.anychart.AnyChartView
 import com.anychart.chart.common.dataentry.DataEntry
 import com.anychart.chart.common.dataentry.ValueDataEntry
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentSnapshot
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
@@ -22,34 +21,10 @@ import msa.myfit.domain.CaloriesToday
 import msa.myfit.domain.DatabaseVariables
 import msa.myfit.firebase.FirebaseUtils
 import java.time.LocalDate
-import java.time.OffsetDateTime
-import java.time.Period
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-/**
- * A simple [Fragment] subclass.
- * Use the [DietOverviewFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class DietOverviewFragment(mainActivity: AppCompatActivity) : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    private val mainActivity = mainActivity
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+class DietOverviewFragment(private val mainActivity: AppCompatActivity) : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -77,7 +52,7 @@ class DietOverviewFragment(mainActivity: AppCompatActivity) : Fragment() {
         userId: String,
         view: View
     ){
-        var retrievedFoods = FirebaseUtils().firestoreDatabase.collection(DatabaseVariables.foodDatabase)
+        val retrievedFoods = FirebaseUtils().firestoreDatabase.collection(DatabaseVariables.foodDatabase)
             .whereEqualTo(DatabaseVariables.userId, userId)
             .get()
             .await()

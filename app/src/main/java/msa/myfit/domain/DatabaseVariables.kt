@@ -37,14 +37,14 @@ object DatabaseVariables {
 
     //weight for today
     //database name
-    val weightForToday = "weights"
+    val weightConsumedDatabase = "weights"
     //variables
     //val userId = "user_id"
     val weight = "weight"
     //val inputDate = "input_date"
 
     //weight goal
-    val weightGoal = "weight_goal"
+    val weightGoalDatabase = "weight_goal"
     //variables
     //val userId = "user_id"
     //val weight = "weight"
