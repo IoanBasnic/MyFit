@@ -27,6 +27,7 @@ import msa.myfit.firebase.FirebaseUtils
 import java.time.LocalDate
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -85,7 +86,6 @@ class WeightOverviewFragment(mainActivity: AppCompatActivity) : Fragment() {
     ){
         retrievedWeights = FirebaseUtils().firestoreDatabase.collection(DatabaseVariables.weightForToday)
             .whereEqualTo(DatabaseVariables.userId, userId)
-            .whereEqualTo(DatabaseVariables.inputDate, currentDate.toString())
             .get()
             .await()
             .documents
@@ -96,7 +96,6 @@ class WeightOverviewFragment(mainActivity: AppCompatActivity) : Fragment() {
             .await()
             .documents
 
-        mainActivity.runOnUiThread {
             val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
             //the list is the other way around, index 6 is the first chronological date and 0 is the last
@@ -154,7 +153,7 @@ class WeightOverviewFragment(mainActivity: AppCompatActivity) : Fragment() {
                         it.data!!.get(DatabaseVariables.inputDate).toString(), formatter
                     )
 
-                    val dateDifference = LocalDate.now().dayOfYear.minus(date.dayOfYear)
+                    val dateDifference = ChronoUnit.DAYS.between(date, LocalDate.now()).toInt()
                     if(dateDifference < 7) {
                         val weightToday = weightThisWeek.get(dateDifference)
 
@@ -168,6 +167,7 @@ class WeightOverviewFragment(mainActivity: AppCompatActivity) : Fragment() {
                 }
             }
 
+        mainActivity.runOnUiThread {
             val pie = AnyChart.line()
             val data: MutableList<DataEntry> = ArrayList()
             val goalData: MutableList<DataEntry> = ArrayList()
