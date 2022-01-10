@@ -115,7 +115,7 @@ class OverviewFragment(mainActivity: AppCompatActivity) : Fragment() {
             var fragment: Fragment? = null
             when (view.id) {
                 R.id.workout_overview  -> {
-                    fragment = WorkoutOverviewFragment()
+                    fragment = WorkoutOverviewFragment(mainActivity)
                     replaceFragment(fragment)
                 }
             }

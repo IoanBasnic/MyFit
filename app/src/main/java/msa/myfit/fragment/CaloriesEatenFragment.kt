@@ -146,15 +146,13 @@ class CaloriesEatenFragment(mainActivity: AppCompatActivity) : Fragment() {
                 tbrow.addView(t1v);
 
                 val t2v : TextView = TextView(activity);
-                val caloriesFood: Float = it.data!!.get(DatabaseVariables.calories).toString().toFloat()
-                caloriesEatenToday = caloriesEatenToday.plus(caloriesFood)
-                t2v.setText(caloriesFood.toString());
+                val foodName: String = it.data!!.get(DatabaseVariables.name).toString()
+                t2v.setText(foodName);
                 t2v.setTextColor(Color.DKGRAY);
                 t2v.setGravity(Gravity.CENTER);
                 tbrow.addView(t2v);
 
                 val t3v : TextView = TextView(activity);
-
                 val type = it.data!!.get(DatabaseVariables.foodType)
                 if(type == null)
                     t3v.setText("")
@@ -165,7 +163,9 @@ class CaloriesEatenFragment(mainActivity: AppCompatActivity) : Fragment() {
                 tbrow.addView(t3v);
 
                 val t4v : TextView = TextView(activity);
-                t4v.setText(it.data!!.get(DatabaseVariables.calories).toString());
+                val caloriesFood: Float = it.data!!.get(DatabaseVariables.calories).toString().toFloat()
+                caloriesEatenToday = caloriesEatenToday.plus(caloriesFood)
+                t4v.setText(caloriesFood.toString());
                 t4v.setTextColor(Color.DKGRAY);
                 t4v.setGravity(Gravity.CENTER);
                 tbrow.addView(t4v);

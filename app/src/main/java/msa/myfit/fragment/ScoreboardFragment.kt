@@ -24,6 +24,7 @@ import msa.myfit.domain.DatabaseVariables
 import msa.myfit.firebase.FirebaseUtils
 import java.time.LocalDate
 import java.time.OffsetDateTime
+import java.util.concurrent.TimeUnit
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -97,8 +98,8 @@ class ScoreboardFragment(mainActivity: AppCompatActivity) : Fragment() {
         tv2.setTextColor(Color.DKGRAY)
         tbrow0.addView(tv2)
         val tv3 : TextView = TextView(activity)
-        tv2.setText(" You ")
-        tv2.setTextColor(Color.DKGRAY)
+        tv3.setText(" You ")
+        tv3.setTextColor(Color.DKGRAY)
         tbrow0.addView(tv3)
         stk.addView(tbrow0)
 
@@ -130,6 +131,7 @@ class ScoreboardFragment(mainActivity: AppCompatActivity) : Fragment() {
             .await()
             .documents
 
+        TimeUnit.SECONDS.sleep(1L)
         val usersAndScores = hashMapOf<String, DisplayNameAndScorePoints>()
 
         retrievedUsers.forEach {
