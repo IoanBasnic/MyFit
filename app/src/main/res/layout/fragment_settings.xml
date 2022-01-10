@@ -20,6 +20,7 @@
     app:layout_constraintTop_toTopOf="parent">
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/btn_scoreboard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_rowWeight="1"
@@ -39,13 +40,13 @@
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_gravity="center"
-                android:src="@drawable/theme" />
+                android:src="@drawable/finish" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:text="Change theme"
+                android:text="Scoreboard"
                 android:layout_gravity="center"
                 android:textColor="#6f6f6f"
                 android:textSize="18sp" />

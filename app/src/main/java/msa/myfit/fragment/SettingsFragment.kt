@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import com.google.firebase.auth.FirebaseAuth
 import msa.myfit.R
 import msa.myfit.authentication.LoginActivity
@@ -64,8 +65,29 @@ class SettingsFragment : Fragment() {
             }
     }
 
+    fun replaceFragment(someFragment: Fragment?) {
+        val transaction: FragmentTransaction = requireFragmentManager().beginTransaction()
+        if (someFragment != null) {
+            transaction.replace(R.id.HomeFragmentId, someFragment)
+        }
+        transaction.addToBackStack(null)
+        transaction.commit()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val scoreboard: CardView = view.findViewById(R.id.btn_scoreboard)
+
+        scoreboard.setOnClickListener { view ->
+            var fragment: Fragment? = null
+            when (view.id) {
+                R.id.btn_scoreboard  -> {
+                    fragment = ScoreboardFragment()
+                    replaceFragment(fragment)
+                }
+            }
+        }
 
         val btnLogout: CardView = view.findViewById(R.id.btn_logout)
         btnLogout.setOnClickListener {
