@@ -12,7 +12,7 @@ class MainActivity : AppCompatActivity() {
 
     private val homeFragment = HomeFragment(this);
     private val myProfileFragment = MyProfileFragment(this);
-    private val settingsFragment = SettingsFragment();
+    private val settingsFragment = SettingsFragment(this);
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -10,12 +10,17 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentSnapshot
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import msa.myfit.R
 import msa.myfit.domain.DatabaseVariables
 import msa.myfit.domain.FinishRouteFragmentData
 import msa.myfit.domain.RouteData
 import msa.myfit.firebase.FirebaseUtils
 import java.time.*
+import java.time.format.DateTimeFormatter
 import kotlin.time.ExperimentalTime
 
 // TODO: Rename parameter arguments, choose names that match
@@ -65,27 +70,52 @@ class FinishRouteFragment(mainActivity: AppCompatActivity) : Fragment() {
             view.findViewById(R.id.route_score)
         )
 
-        //data is mocked for now TODO: change
-        val distanceRun = 0.5f
-        val routeStartTime = OffsetDateTime.now().minusMinutes(30)
-        val currentKg = 70.0f
 
-        val routeTime = Duration.between(routeStartTime, OffsetDateTime.now())
-        val caloriesBurnt = computeCaloriesBurnt(routeTime, currentKg).toFloat()
+        GlobalScope.launch {
+            //data is mocked for now TODO: change
+            val distanceRun = 0.5f
+            val routeStartTime = OffsetDateTime.now().minusMinutes(30)
 
-        val routeResultData = RouteData(
-            routeTime = routeTime,
-            distanceInKm = distanceRun,
-            caloriesBurnt = caloriesBurnt,
-            pointsEarned = computePointsEarned(routeTime, distanceRun, caloriesBurnt),
-            startDateTime = routeStartTime.toLocalDateTime()
-        )
+            val currentKg = retrieveWeightFromDb(correlationId)
 
-        mainActivity.runOnUiThread {
-            updateFragment(finishRouteFragmentData, routeResultData)
+
+
+            val routeTime = Duration.between(routeStartTime, OffsetDateTime.now())
+            val caloriesBurnt = computeCaloriesBurnt(routeTime, currentKg).toFloat()
+
+            val routeResultData = RouteData(
+                routeTime = routeTime,
+                distanceInKm = distanceRun,
+                caloriesBurnt = caloriesBurnt,
+                pointsEarned = computePointsEarned(routeTime, distanceRun, caloriesBurnt),
+                startDateTime = routeStartTime.toLocalDateTime()
+            )
+
+            mainActivity.runOnUiThread {
+                updateFragment(finishRouteFragmentData, routeResultData)
+            }
+
+            saveDataToDb(routeResultData, correlationId)
         }
+    }
 
-        saveDataToDb(routeResultData, correlationId)
+    private suspend fun retrieveWeightFromDb(correlationId: String): Float {
+        val existingDocuments =  FirebaseUtils().firestoreDatabase.collection(DatabaseVariables.weightForToday)
+            .whereEqualTo(DatabaseVariables.userId, correlationId)
+            .get()
+            .await()
+            .documents
+
+        val sortedByDateWeights = existingDocuments.map { documentSnapshot ->
+            Pair(
+                documentSnapshot.data!!.get(DatabaseVariables.weight).toString().toFloat(),
+                LocalDate.parse(documentSnapshot.data!!.get(DatabaseVariables.inputDate).toString(), DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+            )}.sortedByDescending { value -> value.second }
+
+        if(sortedByDateWeights.isEmpty())
+            return 0.0f
+
+        return sortedByDateWeights.first().first
     }
 
     private fun saveDataToDb(routeResultData: RouteData, correlationId: String) {
