@@ -38,7 +38,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentRight="true"
-                    android:src="@drawable/ic_launcher_background"/>
+                    android:src="@drawable/logo"/>
             </RelativeLayout>
 
             <com.google.android.material.textfield.TextInputLayout
