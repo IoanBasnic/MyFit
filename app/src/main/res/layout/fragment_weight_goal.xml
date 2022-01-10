@@ -43,7 +43,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="12dp"
-                    android:text="Weight overview last week"
+                    android:text="Set your weight goal"
                     android:textAlignment="center"
                     android:textColor="#6f6f6f"
                     android:textSize="36sp" />

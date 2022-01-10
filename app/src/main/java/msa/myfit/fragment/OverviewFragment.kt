@@ -23,31 +23,9 @@ import java.time.LocalDate
 import java.time.OffsetDateTime
 import java.util.concurrent.TimeUnit
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [OverviewFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class OverviewFragment(mainActivity: AppCompatActivity) : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-    private val mainActivity = mainActivity
+class OverviewFragment(private val mainActivity: AppCompatActivity) : Fragment() {
     var existingDocuments: MutableList<DocumentSnapshot>? = null
     var existingWeightGoal: MutableList<DocumentSnapshot>? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
@@ -66,7 +44,6 @@ class OverviewFragment(mainActivity: AppCompatActivity) : Fragment() {
             Log.i("tag","Retrieved existing document $existingDocuments with correlation id $correlationId")
         }
 
-
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_overview, container, false)
     }
@@ -80,53 +57,43 @@ class OverviewFragment(mainActivity: AppCompatActivity) : Fragment() {
         val weightOverview: CardView = view.findViewById(R.id.weight_overview)
 
         setGoal.setOnClickListener { view ->
-            var fragment: Fragment? = null
             TimeUnit.SECONDS.sleep(1L)
             when (view.id) {
                 R.id.set_goal  -> {
-                    fragment = WeightGoalFragment(mainActivity, existingWeightGoal)
-                    replaceFragment(fragment)
+                    replaceFragment(WeightGoalFragment(mainActivity, existingWeightGoal))
                 }
             }
         }
 
         setTodayGoal.setOnClickListener { view ->
-            var fragment: Fragment? = null
             TimeUnit.SECONDS.sleep(1L)
             when (view.id) {
                 R.id.set_today_goal  -> {
-                    fragment = TodayWeightFragment(mainActivity, existingDocuments)
-                    replaceFragment(fragment)
+                    replaceFragment(TodayWeightFragment(mainActivity, existingDocuments))
                 }
             }
         }
 
         dietOverview.setOnClickListener { view ->
-            var fragment: Fragment? = null
             when (view.id) {
                 R.id.diet_overview  -> {
-                    fragment = DietOverviewFragment(mainActivity)
-                    replaceFragment(fragment)
+                    replaceFragment(DietOverviewFragment(mainActivity))
                 }
             }
         }
 
         workoutOverview.setOnClickListener { view ->
-            var fragment: Fragment? = null
             when (view.id) {
                 R.id.workout_overview  -> {
-                    fragment = WorkoutOverviewFragment(mainActivity)
-                    replaceFragment(fragment)
+                    replaceFragment(WorkoutOverviewFragment(mainActivity))
                 }
             }
         }
 
         weightOverview.setOnClickListener { view ->
-            var fragment: Fragment? = null
             when (view.id) {
                 R.id.weight_overview  -> {
-                    fragment = WeightOverviewFragment(mainActivity)
-                    replaceFragment(fragment)
+                    replaceFragment(WeightOverviewFragment(mainActivity))
                 }
             }
         }
@@ -142,7 +109,7 @@ class OverviewFragment(mainActivity: AppCompatActivity) : Fragment() {
     }
 
     private suspend fun getWeightsForUserForTodayFromDb(correlationId: String, currentDate: LocalDate): MutableList<DocumentSnapshot> {
-        return FirebaseUtils().firestoreDatabase.collection(DatabaseVariables.weightForToday)
+        return FirebaseUtils().firestoreDatabase.collection(DatabaseVariables.weightConsumedDatabase)
             .whereEqualTo(DatabaseVariables.userId, correlationId)
             .whereEqualTo(DatabaseVariables.inputDate, currentDate.toString())
             .get()
@@ -151,7 +118,7 @@ class OverviewFragment(mainActivity: AppCompatActivity) : Fragment() {
     }
 
     private suspend fun getWeightGoalsForUserForTodayFromDb(correlationId: String, currentDate: LocalDate): MutableList<DocumentSnapshot> {
-        return FirebaseUtils().firestoreDatabase.collection(DatabaseVariables.weightGoal)
+        return FirebaseUtils().firestoreDatabase.collection(DatabaseVariables.weightGoalDatabase)
             .whereEqualTo(DatabaseVariables.userId, correlationId)
             .get()
             .await()

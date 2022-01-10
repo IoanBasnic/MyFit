@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import com.anychart.APIlib
 import com.anychart.AnyChart
 import com.anychart.AnyChartView
 import com.anychart.chart.common.dataentry.DataEntry
@@ -22,34 +23,20 @@ import msa.myfit.domain.DatabaseVariables
 import msa.myfit.domain.DistanceToday
 import msa.myfit.firebase.FirebaseUtils
 import java.time.LocalDate
-import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+class WorkoutOverviewFragment(private val mainActivity: AppCompatActivity) : Fragment() {
 
-/**
- * A simple [Fragment] subclass.
- * Use the [WorkoutOverviewFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class WorkoutOverviewFragment(mainActivity: AppCompatActivity) : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    private val mainActivity = mainActivity
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    val daysOfTheWeek = hashMapOf(
+        "MONDAY" to "Mon",
+        "TUESDAY" to "Tue",
+        "WEDNESDAY" to "Wed",
+        "THURSDAY" to "Thu",
+        "FRIDAY" to "Fri",
+        "SATURDAY" to "Sat",
+        "SUNDAY" to "Sun"
+    )
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -63,17 +50,13 @@ class WorkoutOverviewFragment(mainActivity: AppCompatActivity) : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val correlationId = FirebaseAuth.getInstance().currentUser!!.uid
 
-        val currentDate: LocalDate = LocalDate.now()
         GlobalScope.launch {
             getDistanceForLastWeekAndUpdateView(
                 correlationId,
-                currentDate,
                 view
             )
-        }
 
-        GlobalScope.launch {
-            getCaloriesConsumedForLastWeekAndUpdateView(
+            getCaloriesBurntForLastWeekAndUpdateView(
                 correlationId,
                 view
             )
@@ -81,7 +64,7 @@ class WorkoutOverviewFragment(mainActivity: AppCompatActivity) : Fragment() {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private suspend fun getCaloriesConsumedForLastWeekAndUpdateView(userId: String, view: View) {
+    private suspend fun getCaloriesBurntForLastWeekAndUpdateView(userId: String, view: View) {
         val retrievedRoutes = FirebaseUtils().firestoreDatabase.collection(DatabaseVariables.routeDatabase)
             .whereEqualTo(DatabaseVariables.userId, userId)
             .get()
@@ -120,17 +103,8 @@ class WorkoutOverviewFragment(mainActivity: AppCompatActivity) : Fragment() {
 
         mainActivity.runOnUiThread {
             val pie = AnyChart.line()
-            val data: MutableList<DataEntry> = ArrayList()
 
-            val daysOfTheWeek = hashMapOf(
-                "MONDAY" to "Mon",
-                "TUESDAY" to "Tue",
-                "WEDNESDAY" to "Wed",
-                "THURSDAY" to "Thu",
-                "FRIDAY" to "Fri",
-                "SATURDAY" to "Sat",
-                "SUNDAY" to "Sun"
-            )
+            val data: MutableList<DataEntry> = ArrayList()
 
             for(calories in caloriesBurntThisWeek.asReversed()){
                 data.add(ValueDataEntry(daysOfTheWeek.get(calories.dayOfWeek.name), calories.calorieSum.toDouble()))
@@ -141,12 +115,13 @@ class WorkoutOverviewFragment(mainActivity: AppCompatActivity) : Fragment() {
             pie.yAxis("kcal")
 
             val anyChartView : AnyChartView = view.findViewById(R.id.any_chart_view1)
+            APIlib.getInstance().setActiveAnyChartView(anyChartView)
             anyChartView.setChart(pie)
         }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private suspend fun getDistanceForLastWeekAndUpdateView(userId: String, currentDate: LocalDate, view: View) {
+    private suspend fun getDistanceForLastWeekAndUpdateView(userId: String, view: View) {
         val retrievedRoutes = FirebaseUtils().firestoreDatabase.collection(DatabaseVariables.routeDatabase)
             .whereEqualTo(DatabaseVariables.userId, userId)
             .get()
@@ -187,16 +162,6 @@ class WorkoutOverviewFragment(mainActivity: AppCompatActivity) : Fragment() {
             val pie = AnyChart.line()
             val data: MutableList<DataEntry> = ArrayList()
 
-            val daysOfTheWeek = hashMapOf(
-                "MONDAY" to "Mon",
-                "TUESDAY" to "Tue",
-                "WEDNESDAY" to "Wed",
-                "THURSDAY" to "Thu",
-                "FRIDAY" to "Fri",
-                "SATURDAY" to "Sat",
-                "SUNDAY" to "Sun"
-            )
-
             for(distance in distanceRanThisWeek.asReversed()){
                 data.add(ValueDataEntry(daysOfTheWeek.get(distance.dayOfWeek.name), distance.distanceSum.toDouble()))
             }
@@ -206,27 +171,9 @@ class WorkoutOverviewFragment(mainActivity: AppCompatActivity) : Fragment() {
             pie.yAxis("Km")
 
             val anyChartView : AnyChartView = view.findViewById(R.id.any_chart_view2)
+            APIlib.getInstance().setActiveAnyChartView(anyChartView)
             anyChartView.setChart(pie)
         }
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment WorkoutOverviewFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String, mainActivity: AppCompatActivity) =
-            WorkoutOverviewFragment(mainActivity).apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
-    }
 }

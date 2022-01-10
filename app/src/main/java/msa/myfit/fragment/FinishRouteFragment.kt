@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentSnapshot
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
@@ -23,30 +22,7 @@ import java.time.*
 import java.time.format.DateTimeFormatter
 import kotlin.time.ExperimentalTime
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [FinishRouteFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class FinishRouteFragment(mainActivity: AppCompatActivity) : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    private val mainActivity = mainActivity
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+class FinishRouteFragment(private val mainActivity: AppCompatActivity) : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -77,9 +53,6 @@ class FinishRouteFragment(mainActivity: AppCompatActivity) : Fragment() {
             val routeStartTime = OffsetDateTime.now().minusMinutes(30)
 
             val currentKg = retrieveWeightFromDb(correlationId)
-
-
-
             val routeTime = Duration.between(routeStartTime, OffsetDateTime.now())
             val caloriesBurnt = computeCaloriesBurnt(routeTime, currentKg).toFloat()
 
@@ -99,8 +72,9 @@ class FinishRouteFragment(mainActivity: AppCompatActivity) : Fragment() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private suspend fun retrieveWeightFromDb(correlationId: String): Float {
-        val existingDocuments =  FirebaseUtils().firestoreDatabase.collection(DatabaseVariables.weightForToday)
+        val existingDocuments =  FirebaseUtils().firestoreDatabase.collection(DatabaseVariables.weightConsumedDatabase)
             .whereEqualTo(DatabaseVariables.userId, correlationId)
             .get()
             .await()
@@ -152,7 +126,7 @@ class FinishRouteFragment(mainActivity: AppCompatActivity) : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun computePointsEarned(routeTime: Duration?, distanceRun: Float, caloriesBurnt: Float): Long {
 
-        var averageSpeed: Float
+        val averageSpeed: Float
         if(routeTime!!.toMinutes().equals(Duration.ofHours(0))) {
             averageSpeed = 0f
         }

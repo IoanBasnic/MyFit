@@ -21,33 +21,10 @@ import msa.myfit.R
 import msa.myfit.domain.DatabaseVariables
 import msa.myfit.firebase.FirebaseUtils
 
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [WeightGoalFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class WeightGoalFragment(mainActivity: AppCompatActivity, existingDocuments: MutableList<DocumentSnapshot>?) : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    private val mainActivity = mainActivity
-    private var existingDocuments: MutableList<DocumentSnapshot>? = existingDocuments
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-
-    }
+class WeightGoalFragment(
+    private val mainActivity: AppCompatActivity,
+    private var existingDocuments: MutableList<DocumentSnapshot>?
+) : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -60,27 +37,6 @@ class WeightGoalFragment(mainActivity: AppCompatActivity, existingDocuments: Mut
         }
 
         return inflater.inflate(R.layout.fragment_weight_goal_already_inputted, container, false)
-
-    }
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment WeightGoalkFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String, mainActivity: AppCompatActivity, existingDocuments: MutableList<DocumentSnapshot>?) =
-            WeightGoalFragment(mainActivity, existingDocuments).apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -126,7 +82,7 @@ class WeightGoalFragment(mainActivity: AppCompatActivity, existingDocuments: Mut
                             DatabaseVariables.weight to weightToSave
                         )
 
-                        FirebaseUtils().firestoreDatabase.collection(DatabaseVariables.weightGoal)
+                        FirebaseUtils().firestoreDatabase.collection(DatabaseVariables.weightGoalDatabase)
                             .add(weightGoalToAdd)
                             .addOnSuccessListener {
                                 Log.d(TAG, "Added weight goal with ID ${it.id}")
@@ -143,7 +99,7 @@ class WeightGoalFragment(mainActivity: AppCompatActivity, existingDocuments: Mut
         }
     }
 
-    fun replaceFragment(someFragment: Fragment?) {
+    private fun replaceFragment(someFragment: Fragment?) {
         val transaction: FragmentTransaction = requireFragmentManager().beginTransaction()
         if (someFragment != null) {
             transaction.replace(R.id.HomeFragmentId, someFragment)
