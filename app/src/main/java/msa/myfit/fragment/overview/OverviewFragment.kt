@@ -41,7 +41,7 @@ class OverviewFragment(private val mainActivity: AppCompatActivity) : Fragment()
 
         GlobalScope.launch {
             existingWeightGoal = getWeightGoalsForUserForTodayFromDb(correlationId, OffsetDateTime.now().toLocalDate())
-            Log.i("tag","Retrieved existing document $existingDocuments with correlation id $correlationId")
+            Log.i("tag","Retrieved existing document $existingWeightGoal with correlation id $correlationId")
         }
 
         // Inflate the layout for this fragment

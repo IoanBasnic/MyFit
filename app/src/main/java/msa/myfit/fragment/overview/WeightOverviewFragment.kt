@@ -198,6 +198,9 @@ class WeightOverviewFragment(private val mainActivity: AppCompatActivity) : Frag
                 .offsetX(5.0)
                 .offsetY(5.0)
 
+            pie.title("Your weight over this week")
+            pie.yAxis("km")
+
             val anyChartView : AnyChartView = view.findViewById(R.id.any_chart_view)
             anyChartView.setChart(pie)
         }
