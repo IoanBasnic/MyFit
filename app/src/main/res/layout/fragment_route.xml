@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:id="@+id/calories_fragment"
     android:background="@drawable/trasnparent_background"
-    tools:context=".fragment.RouteFragment">
+    tools:context=".fragment.route.RouteFragment">
 
     <GridLayout
         android:id="@+id/gridLayout"
@@ -80,15 +80,18 @@
         android:id="@+id/gridLayout3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
         android:alignmentMode="alignMargins"
         android:columnCount="2"
         android:columnOrderPreserved="false"
+        android:orientation="vertical"
         android:rowCount="2"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/gridLayout2"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints"
-        android:visibility="invisible">
+        tools:ignore="MissingConstraints">
 
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
@@ -99,6 +102,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:orientation="vertical"
+                android:background="@drawable/trasnparent_background"
                 android:padding="16dp">
 
                 <TextView
@@ -107,6 +111,7 @@
                     android:text="Time:" />
 
                 <TextView
+                    android:id="@+id/countDownTimer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="00:00" />
@@ -122,6 +127,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:orientation="vertical"
+                android:background="@drawable/trasnparent_background"
                 android:padding="16dp">
 
                 <TextView

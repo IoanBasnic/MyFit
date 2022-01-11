@@ -1,4 +1,4 @@
-package msa.myfit.fragment
+package msa.myfit.fragment.overview
 
 import android.os.Build
 import android.os.Bundle
@@ -20,6 +20,8 @@ import com.google.firebase.firestore.DocumentSnapshot
 import msa.myfit.R
 import msa.myfit.domain.DatabaseVariables
 import msa.myfit.firebase.FirebaseUtils
+import msa.myfit.fragment.HomeFragment
+import msa.myfit.fragment.my_profile.TAG
 import java.time.OffsetDateTime
 
 class TodayWeightFragment(private val mainActivity: AppCompatActivity, existingDocuments: MutableList<DocumentSnapshot>?) : Fragment() {
@@ -88,7 +90,11 @@ class TodayWeightFragment(private val mainActivity: AppCompatActivity, existingD
                             .addOnSuccessListener {
                                 Log.d(TAG, "Added weight for today with ID ${it.id}")
 
-                                replaceFragment(HomeFragment(mainActivity))
+                                replaceFragment(
+                                    HomeFragment(
+                                        mainActivity
+                                    )
+                                )
                             }
                             .addOnFailureListener { exception ->
                                 Log.w(TAG, "Error adding user profile $exception")

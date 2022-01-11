@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/home_menu_background"
-    tools:context=".fragment.MyProfileFragment">
+    tools:context=".fragment.my_profile.MyProfileFragment">
 
     <RelativeLayout
         android:id="@+id/relativeLayout"

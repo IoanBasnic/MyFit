@@ -9,6 +9,9 @@ import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import msa.myfit.R
+import msa.myfit.fragment.calories_eaten.CaloriesEatenFragment
+import msa.myfit.fragment.overview.OverviewFragment
+import msa.myfit.fragment.route.RouteFragment
 
 class HomeFragment(private val mainActivity: AppCompatActivity) : Fragment() {
 
@@ -37,7 +40,11 @@ class HomeFragment(private val mainActivity: AppCompatActivity) : Fragment() {
         caloriesEatenBtn.setOnClickListener { view ->
             when (view.id) {
                 R.id.calories_eaten  -> {
-                    replaceFragment(CaloriesEatenFragment(mainActivity))
+                    replaceFragment(
+                        CaloriesEatenFragment(
+                            mainActivity
+                        )
+                    )
                 }
             }
         }
@@ -45,7 +52,11 @@ class HomeFragment(private val mainActivity: AppCompatActivity) : Fragment() {
         routeBtn.setOnClickListener { view ->
             when (view.id) {
                 R.id.routes  -> {
-                    replaceFragment(RouteFragment(mainActivity))
+                    replaceFragment(
+                        RouteFragment(
+                            mainActivity
+                        )
+                    )
                 }
             }
         }
@@ -53,7 +64,11 @@ class HomeFragment(private val mainActivity: AppCompatActivity) : Fragment() {
         overviewBtn.setOnClickListener { view ->
             when (view.id) {
                 R.id.overview  -> {
-                    replaceFragment(OverviewFragment(mainActivity))
+                    replaceFragment(
+                        OverviewFragment(
+                            mainActivity
+                        )
+                    )
                 }
             }
         }
