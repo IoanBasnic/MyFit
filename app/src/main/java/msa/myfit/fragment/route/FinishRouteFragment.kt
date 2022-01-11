@@ -1,4 +1,4 @@
-package msa.myfit.fragment
+package msa.myfit.fragment.route
 
 import android.os.Build
 import android.os.Bundle
@@ -18,6 +18,7 @@ import msa.myfit.domain.DatabaseVariables
 import msa.myfit.domain.FinishRouteFragmentData
 import msa.myfit.domain.RouteData
 import msa.myfit.firebase.FirebaseUtils
+import msa.myfit.fragment.my_profile.TAG
 import java.time.*
 import java.time.format.DateTimeFormatter
 import kotlin.time.ExperimentalTime

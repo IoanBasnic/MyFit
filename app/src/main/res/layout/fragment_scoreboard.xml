@@ -6,7 +6,7 @@
     android:id="@+id/fragment_scoreboard"
     android:background="@drawable/trasnparent_background"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".fragment.ScoreboardFragment">
+    tools:context=".fragment.settings.ScoreboardFragment">
 
     <GridLayout
         android:id="@+id/gridLayout"

@@ -7,7 +7,7 @@
     android:id="@+id/HomeFragmentId"
     android:clickable="true"
     android:background="@drawable/trasnparent_background"
-    tools:context=".fragment.FinishRouteFragment">
+    tools:context=".fragment.route.FinishRouteFragment">
 
     <GridLayout
         android:id="@+id/gridLayout3"

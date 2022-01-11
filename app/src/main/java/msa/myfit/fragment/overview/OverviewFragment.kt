@@ -1,4 +1,4 @@
-package msa.myfit.fragment
+package msa.myfit.fragment.overview
 
 import android.os.Build
 import android.os.Bundle
@@ -60,7 +60,12 @@ class OverviewFragment(private val mainActivity: AppCompatActivity) : Fragment()
             TimeUnit.SECONDS.sleep(1L)
             when (view.id) {
                 R.id.set_goal  -> {
-                    replaceFragment(WeightGoalFragment(mainActivity, existingWeightGoal))
+                    replaceFragment(
+                        WeightGoalFragment(
+                            mainActivity,
+                            existingWeightGoal
+                        )
+                    )
                 }
             }
         }
@@ -69,7 +74,12 @@ class OverviewFragment(private val mainActivity: AppCompatActivity) : Fragment()
             TimeUnit.SECONDS.sleep(1L)
             when (view.id) {
                 R.id.set_today_goal  -> {
-                    replaceFragment(TodayWeightFragment(mainActivity, existingDocuments))
+                    replaceFragment(
+                        TodayWeightFragment(
+                            mainActivity,
+                            existingDocuments
+                        )
+                    )
                 }
             }
         }
@@ -77,7 +87,11 @@ class OverviewFragment(private val mainActivity: AppCompatActivity) : Fragment()
         dietOverview.setOnClickListener { view ->
             when (view.id) {
                 R.id.diet_overview  -> {
-                    replaceFragment(DietOverviewFragment(mainActivity))
+                    replaceFragment(
+                        DietOverviewFragment(
+                            mainActivity
+                        )
+                    )
                 }
             }
         }
@@ -85,7 +99,11 @@ class OverviewFragment(private val mainActivity: AppCompatActivity) : Fragment()
         workoutOverview.setOnClickListener { view ->
             when (view.id) {
                 R.id.workout_overview  -> {
-                    replaceFragment(WorkoutOverviewFragment(mainActivity))
+                    replaceFragment(
+                        WorkoutOverviewFragment(
+                            mainActivity
+                        )
+                    )
                 }
             }
         }
@@ -93,7 +111,11 @@ class OverviewFragment(private val mainActivity: AppCompatActivity) : Fragment()
         weightOverview.setOnClickListener { view ->
             when (view.id) {
                 R.id.weight_overview  -> {
-                    replaceFragment(WeightOverviewFragment(mainActivity))
+                    replaceFragment(
+                        WeightOverviewFragment(
+                            mainActivity
+                        )
+                    )
                 }
             }
         }

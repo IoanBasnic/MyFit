@@ -1,4 +1,4 @@
-package msa.myfit.fragment
+package msa.myfit.fragment.overview
 
 import android.os.Build
 import android.os.Bundle
@@ -20,6 +20,8 @@ import com.google.firebase.firestore.DocumentSnapshot
 import msa.myfit.R
 import msa.myfit.domain.DatabaseVariables
 import msa.myfit.firebase.FirebaseUtils
+import msa.myfit.fragment.HomeFragment
+import msa.myfit.fragment.my_profile.TAG
 
 class WeightGoalFragment(
     private val mainActivity: AppCompatActivity,
@@ -87,7 +89,8 @@ class WeightGoalFragment(
                             .addOnSuccessListener {
                                 Log.d(TAG, "Added weight goal with ID ${it.id}")
 
-                                var fragment: Fragment? = HomeFragment(mainActivity)
+                                var fragment: Fragment? =
+                                    HomeFragment(mainActivity)
                                 replaceFragment(fragment)
                             }
                             .addOnFailureListener { exception ->
