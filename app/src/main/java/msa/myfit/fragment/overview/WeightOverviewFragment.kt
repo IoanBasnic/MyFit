@@ -1,4 +1,4 @@
-package msa.myfit.fragment
+package msa.myfit.fragment.overview
 
 import android.os.Build
 import android.os.Bundle

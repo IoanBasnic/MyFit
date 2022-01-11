@@ -1,4 +1,4 @@
-package msa.myfit.fragment
+package msa.myfit.fragment.my_profile
 
 import android.app.Activity
 import android.os.Bundle

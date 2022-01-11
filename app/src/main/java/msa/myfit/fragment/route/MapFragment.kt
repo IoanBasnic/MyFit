@@ -1,4 +1,4 @@
-package msa.myfit.fragment
+package msa.myfit.fragment.route
 
 import android.os.Bundle
 import android.view.LayoutInflater

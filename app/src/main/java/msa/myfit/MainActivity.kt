@@ -5,15 +5,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.activity_main.*
 import msa.myfit.fragment.HomeFragment
-import msa.myfit.fragment.MyProfileFragment
-import msa.myfit.fragment.SettingsFragment
-import javax.net.ssl.HttpsURLConnection
+import msa.myfit.fragment.my_profile.MyProfileFragment
+import msa.myfit.fragment.settings.SettingsFragment
 
 class MainActivity : AppCompatActivity() {
 
     private val homeFragment = HomeFragment(this);
-    private val myProfileFragment = MyProfileFragment(this);
-    private val settingsFragment = SettingsFragment(this);
+    private val myProfileFragment =
+        MyProfileFragment(this);
+    private val settingsFragment =
+        SettingsFragment(this);
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

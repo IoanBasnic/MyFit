@@ -1,4 +1,4 @@
-package msa.myfit.fragment
+package msa.myfit.fragment.settings
 
 import android.content.Intent
 import android.os.Bundle
@@ -41,7 +41,11 @@ class SettingsFragment(private val mainActivity: AppCompatActivity) : Fragment()
         scoreboard.setOnClickListener { view ->
             when (view.id) {
                 R.id.btn_scoreboard  -> {
-                    replaceFragment(ScoreboardFragment(mainActivity))
+                    replaceFragment(
+                        ScoreboardFragment(
+                            mainActivity
+                        )
+                    )
                 }
             }
         }

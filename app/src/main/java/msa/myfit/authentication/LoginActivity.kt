@@ -17,8 +17,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import msa.myfit.MainActivity
 import msa.myfit.R
-import msa.myfit.fragment.TAG
-import java.util.*
+import msa.myfit.fragment.my_profile.TAG
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth

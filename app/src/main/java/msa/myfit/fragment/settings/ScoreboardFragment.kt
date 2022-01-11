@@ -1,4 +1,4 @@
-package msa.myfit.fragment
+package msa.myfit.fragment.settings
 
 import android.graphics.Color
 import android.os.Build
@@ -105,13 +105,22 @@ class ScoreboardFragment(private val mainActivity: AppCompatActivity) : Fragment
                 displayName = "$firstName $lastName"
             }
 
-            usersAndScores.put(correlationId, DisplayNameAndScorePoints(displayName, 0))
+            usersAndScores.put(correlationId,
+                DisplayNameAndScorePoints(
+                    displayName,
+                    0
+                )
+            )
         }
 
         retrievedPoints.forEach {
             val routeCorrelationId = it.data!!.get(DatabaseVariables.userId).toString()
             val routePoints = it.data!!.get(DatabaseVariables.pointsEarned).toString().toInt()
-            val newDisplayNameAndScorePoints = DisplayNameAndScorePoints(usersAndScores.get(routeCorrelationId)!!.displayName, usersAndScores.get(routeCorrelationId)!!.score.plus(routePoints))
+            val newDisplayNameAndScorePoints =
+                DisplayNameAndScorePoints(
+                    usersAndScores.get(routeCorrelationId)!!.displayName,
+                    usersAndScores.get(routeCorrelationId)!!.score.plus(routePoints)
+                )
 
             usersAndScores.replace(routeCorrelationId, newDisplayNameAndScorePoints)
         }

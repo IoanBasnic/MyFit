@@ -1,4 +1,4 @@
-package msa.myfit.fragment
+package msa.myfit.fragment.calories_eaten
 
 import android.app.Dialog
 import android.graphics.Color
@@ -20,6 +20,7 @@ import msa.myfit.domain.AddFoodFragmentButton
 import msa.myfit.domain.AddFoodFragmentFields
 import msa.myfit.domain.DatabaseVariables
 import msa.myfit.firebase.FirebaseUtils
+import msa.myfit.fragment.my_profile.TAG
 import java.time.LocalDate
 import java.time.OffsetDateTime
 

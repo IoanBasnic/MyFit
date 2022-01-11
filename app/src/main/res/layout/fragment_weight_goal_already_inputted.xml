@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/trasnparent_background"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".fragment.TodayWeightFragment">
+    tools:context=".fragment.overview.TodayWeightFragment">
 
     <GridLayout
         android:id="@+id/gridLayout"
@@ -61,6 +61,22 @@
                     android:textSize="18sp" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
+
+        <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
+            android:id="@+id/btn_set_weight_goal"
+            style="@style/loginButton"
+            android:layout_gravity="center_horizontal"
+            android:text="Set another weight goal"
+            app:initialCornerAngle="27dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/gridLayout2"
+            app:layout_constraintVertical_bias="0.24"
+            app:spinning_bar_color="#FFF"
+            app:spinning_bar_padding="6dp"
+            app:spinning_bar_width="4dp" />
     </GridLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
