@@ -87,7 +87,7 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="What is your weight goal today in Kg?">
+                    android:hint="What is your weight goal in Kg?">
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/edit_weight_goal_for_today"
                         android:layout_width="match_parent"
