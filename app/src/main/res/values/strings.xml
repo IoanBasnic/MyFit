@@ -22,5 +22,7 @@
         <item>Female</item>
         <item>Other</item>
     </string-array>
+
+    <string name="google_maps_key1" templateMergeStrategy="preserve" translatable="false">AIzaSyD4Q7p20VncF75MdSF7sDGI9qyCJKFVod4</string>
     <string name="title_activity_maps">Map</string>
 </resources>

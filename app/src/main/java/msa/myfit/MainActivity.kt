@@ -7,6 +7,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import msa.myfit.fragment.HomeFragment
 import msa.myfit.fragment.MyProfileFragment
 import msa.myfit.fragment.SettingsFragment
+import javax.net.ssl.HttpsURLConnection
 
 class MainActivity : AppCompatActivity() {
 
@@ -16,6 +17,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //HttpsURLConnection.setDefaultSSLSocketFactory(sslContext.getSocketFactory());
         setContentView(R.layout.activity_main)
 
         replaceFragment(homeFragment)
