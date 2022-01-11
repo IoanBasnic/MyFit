@@ -55,6 +55,7 @@ class OverviewFragment(private val mainActivity: AppCompatActivity) : Fragment()
         val dietOverview: CardView = view.findViewById(R.id.diet_overview)
         val workoutOverview: CardView = view.findViewById(R.id.workout_overview)
         val weightOverview: CardView = view.findViewById(R.id.weight_overview)
+        val caloriesBurnt: CardView = view.findViewById(R.id.calories_burnt)
 
         setGoal.setOnClickListener { view ->
             TimeUnit.SECONDS.sleep(1L)
@@ -113,6 +114,18 @@ class OverviewFragment(private val mainActivity: AppCompatActivity) : Fragment()
                 R.id.weight_overview  -> {
                     replaceFragment(
                         WeightOverviewFragment(
+                            mainActivity
+                        )
+                    )
+                }
+            }
+        }
+
+        caloriesBurnt.setOnClickListener { view ->
+            when (view.id) {
+                R.id.calories_burnt  -> {
+                    replaceFragment(
+                        CaloriesBurntFragment(
                             mainActivity
                         )
                     )
