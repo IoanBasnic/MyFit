@@ -22,7 +22,7 @@ class RouteFragment(private val mainActivity: AppCompatActivity) : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val childFragment: MapFragment = MapFragment()
+        val childFragment: MapFragment = MapFragment(mainActivity)
         val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
         transaction.replace(R.id.GoogleMapsFragment, childFragment).commit()
 
